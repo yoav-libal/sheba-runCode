@@ -1,0 +1,10 @@
+{
+  "inputHtml": "hebrew_report_20251023_121630.html",
+  "outputPdf": "my_hebrew_document.pdf",
+  "description": "Configuration file for HTML to PDF conversion",
+  "options": {
+    "format": "A4",
+    "orientation": "portrait",
+    "border": "20mm"
+  }
+}

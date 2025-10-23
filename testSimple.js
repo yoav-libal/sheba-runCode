@@ -11,8 +11,8 @@ const _=global
 async function main(context) {
     const { ColorLog } = context;
     
-    ColorLog.CB('🚀 Simple Test - Checking jsPDF availability');
-    ColorLog.CB('===========================================');
+    ColorLog.BW('🚀 Simple Test - Checking jsPDF availability');
+    ColorLog.BW('===========================================');
     
     try {
         // Debug: Check what's available

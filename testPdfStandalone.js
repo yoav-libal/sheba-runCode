@@ -5,8 +5,8 @@
  */
 
 async function testStandalonePdfGeneration() {
-    ColorLog.CB('🚀 Starting Standalone PDF Test - Hebrew Support');
-    ColorLog.CB('==================================================');
+    ColorLog.BW('🚀 Starting Standalone PDF Test - Hebrew Support');
+    ColorLog.BW('==================================================');
     
     try {
         // Test 1: Basic jsPDF functionality

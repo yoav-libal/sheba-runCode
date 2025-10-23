@@ -11,8 +11,8 @@ const _=global
 
 async function testSimpleStandalonePdf(context) {
     const { ColorLog, jsPDF, moment, fsExtra } = context;
-    ColorLog.CB('🚀 Simple Standalone PDF Test - Hebrew Support');
-    ColorLog.CB('===============================================');
+    ColorLog.BW('🚀 Simple Standalone PDF Test - Hebrew Support');
+    ColorLog.BW('===============================================');
     
     try {
         ColorLog.BW('📄 Testing jsPDF Hebrew PDF generation...');

@@ -76,8 +76,6 @@ class RunCodeV3 {
      */
     async performDatabaseValidation(argv) {
         try {
-            ColorLog.BW('🔍 Performing database validation...');
-            
             // Check if script contains bypass string
             const fs = require('fs');
             const targetFile = argv.f || argv.file;
@@ -87,7 +85,6 @@ class RunCodeV3 {
                 
                 // Check for bypass string
                 if (RunCodeV3.shouldBypassDatabaseValidation(scriptContent)) {
-                    ColorLog.GW('✅ Database validation bypassed');
                     return;
                 }
             }
@@ -389,7 +386,6 @@ class RunCodeV3 {
         const bypassString = 'ignoreAllByLibal';
         
         if (scriptContent.includes(bypassString)) {
-            ColorLog.YW('🔓 Database validation bypass detected - ignoring all DB tests');
             return true;
         }
         

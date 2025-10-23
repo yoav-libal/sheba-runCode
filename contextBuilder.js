@@ -67,7 +67,6 @@ class ContextBuilder {
         }
 
         this.context.argv = cleanArgv;
-        ColorLog.BW('📋 Added command line arguments to context');
     }
 
     /**
@@ -87,9 +86,6 @@ class ContextBuilder {
             // Merge extra parameters into argv
             this.context.argv = { ...this.context.argv, ...extraParams };
             
-            ColorLog.GW(`✅ Loaded extra parameters from ${extraParamFile}`);
-            ColorLog.WB('Extra parameters:', this.maskSensitiveData(extraParams));
-
         } catch (error) {
             ColorLog.RW(`❌ Failed to load extra parameters: ${error.message}`);
             // Don't throw error, just continue without extra params
@@ -110,8 +106,6 @@ class ContextBuilder {
             directory: path.dirname(resolvedPath),
             exists: fs.existsSync(resolvedPath)
         };
-
-        ColorLog.BW(`📄 Target file: ${this.context.fileInfo.fileName}`);
     }
 
     /**
@@ -155,8 +149,6 @@ class ContextBuilder {
 
         // Add global reference
         this.context.global = global;
-
-        ColorLog.BW('🛠️  Added execution utilities');
     }
 
     /**
@@ -171,10 +163,6 @@ class ContextBuilder {
             this.context.dbClose = dbUtils.dbClose;
             this.context.executeQuery = dbUtils.executeQuery;
             this.context.processDbParameters = dbUtils.processDbParameters;
-            
-            ColorLog.BW('📊 Added database utilities to context');
-        } else {
-            ColorLog.YW('⚠️  Database utilities not available (SQL module missing)');
         }
     }
 
@@ -230,7 +218,6 @@ class ContextBuilder {
      */
     addToContext(key, value) {
         this.context[key] = value;
-        ColorLog.BW(`➕ Added '${key}' to context`);
     }
 
     /**

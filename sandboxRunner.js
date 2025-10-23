@@ -99,7 +99,6 @@ class SandboxRunner {
     readTargetFile(filePath) {
         try {
             const content = fs.readFileSync(filePath, 'utf8');
-            ColorLog.BW(`📖 Read ${content.length} characters from ${path.basename(filePath)}`);
             return content;
         } catch (error) {
             throw new Error(`Failed to read file ${filePath}: ${error.message}`);
@@ -144,7 +143,6 @@ class SandboxRunner {
         // Ensure global reference points to sandbox
         sandbox.global = sandbox;
 
-        ColorLog.BW('🛡️  Sandbox environment prepared');
         return sandbox;
     }
 
@@ -163,8 +161,6 @@ class SandboxRunner {
             // Wrap the code to handle async main function
             const wrappedCode = this.wrapCodeForExecution(code);
             
-            ColorLog.WB('⚡ Executing in sandbox...');
-            
             // Execute the code
             const script = new vm.Script(wrappedCode, {
                 filename: path.basename(filePath),
@@ -175,7 +171,6 @@ class SandboxRunner {
             
             // If result is a Promise (async function), wait for it
             if (result && typeof result.then === 'function') {
-                ColorLog.WB('⏳ Waiting for async execution...');
                 return await result;
             }
             
@@ -206,6 +201,7 @@ class SandboxRunner {
         if (typeof main === 'function') {
             const context = {
                 sql, moment, argv, fsExtra, ColorLog, excel, XLSX, XLSX_CALC, execSync,
+                puppeteerCore, chromium,
                 nodemailer, emailSender, mailer,
                 dbConnect, dbClose, executeQuery, processDbParameters,
                 process, console, global

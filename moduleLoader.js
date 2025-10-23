@@ -25,6 +25,8 @@ class ModuleLoader {
             { name: 'fs-extra', alias: 'fsExtra' },
             { name: 'xlsx', alias: 'XLSX' },
             { name: 'xlsx-calc', alias: 'XLSX_CALC' },
+            { name: 'puppeteer-core', alias: 'puppeteerCore' },
+            { name: '@sparticuz/chromium', alias: 'chromium' },
             { name: 'nodemailer', alias: 'nodemailer' },
             { name: 'child_process', alias: 'childProcess', isBuiltIn: true }
         ];
@@ -112,9 +114,9 @@ class ModuleLoader {
         // Add excel alias for XLSX
         this.modules.excel = this.modules.XLSX;
 
-        // Add utility aliases (no PDF modules)
+        // Add utility aliases and PDF modules
         this.modules.htmlGenerator = this.modules.fsExtra; // For HTML file generation
-
+        
         // Add email aliases
         this.modules.emailSender = this.modules.nodemailer;
         this.modules.mailer = this.modules.nodemailer;
@@ -122,7 +124,7 @@ class ModuleLoader {
         // Add ColorLog
         this.modules.ColorLog = ColorLog;
 
-        ColorLog.BW('📦 Added utility aliases, PDF modules, email modules, and ColorLog');
+        ColorLog.BW('📦 Added utility aliases, email modules, and ColorLog');
     }
 
     /**
