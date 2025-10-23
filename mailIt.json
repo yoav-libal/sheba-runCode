@@ -1,0 +1,50 @@
+{
+  "smtp": {
+    "host": "smtp.gmail.com",
+    "port": 587,
+    "secure": false,
+    "auth": {
+      "user": "your-email@gmail.com",
+      "pass": "your-app-password"
+    },
+    "tls": {
+      "rejectUnauthorized": false
+    }
+  },
+  "email": {
+    "from": {
+      "name": "RunCodeV3 System",
+      "address": "your-email@gmail.com"
+    },
+    "to": [
+      {
+        "name": "Test Recipient",
+        "address": "recipient@example.com"
+      }
+    ],
+    "cc": [],
+    "bcc": [],
+    "subject": "📧 Test Email from RunCodeV3 - עברית מקוריים תמיכה (Hebrew Support Test)",
+    "html": "<h1>שלום! Hello from RunCodeV3</h1><p>This email demonstrates:</p><ul><li>Hebrew character support: שלום עולם</li><li>HTML formatting</li><li>File attachments</li><li>SMTP connectivity</li></ul><p>Generated at: {{timestamp}}</p>",
+    "text": "שלום! Hello from RunCodeV3\n\nThis email demonstrates Hebrew character support and SMTP functionality.\nGenerated at: {{timestamp}}"
+  },
+  "attachments": [
+    {
+      "filename": "test-report.json",
+      "path": "./processing-report.json",
+      "contentType": "application/json"
+    },
+    {
+      "filename": "generated-pdf.pdf", 
+      "path": "./test-generated.pdf",
+      "contentType": "application/pdf"
+    }
+  ],
+  "options": {
+    "enableHebrewSupport": true,
+    "encoding": "utf8",
+    "timeout": 30000,
+    "maxRetries": 3,
+    "testMode": true
+  }
+}

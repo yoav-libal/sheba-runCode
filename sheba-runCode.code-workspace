@@ -1,0 +1,11 @@
+{
+    "folders": [
+        {
+            "name": "sheba-runCode",
+            "path": "."
+        }
+    ],
+    "settings": {
+        "git.defaultBranchName": "master"
+    }
+}

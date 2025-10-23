@@ -1,0 +1,23 @@
+{
+  "scripts": [
+    "runCodeV3-lite.js",
+    "node_modules/moment/**/*.js",
+    "node_modules/yargs/**/*.js", 
+    "node_modules/fs-extra/**/*.js",
+    "node_modules/xlsx/**/*.js",
+    "node_modules/pdf-parse/**/*.js",
+    "node_modules/pdfkit/**/*.js",
+    "node_modules/mssql/**/*.js",
+    "node_modules/nodemailer/**/*.js"
+  ],
+  "assets": [
+    "*.js",
+    "*.json",
+    "node_modules/pdfkit/js/data/**/*",
+    "node_modules/moment/locale/en.js"
+  ],
+  "targets": [
+    "node18-win-x64"
+  ],
+  "outputPath": "./dist"
+}

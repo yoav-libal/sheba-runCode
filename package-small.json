@@ -1,0 +1,36 @@
+{
+  "name": "sheba-runcode",
+  "version": "1.0.0",
+  "description": "Sheba RunCode Project - Optimized Build",
+  "main": "runCodeV3.js",
+  "bin": {
+    "sheba-runcode": "./runCodeV3.js"
+  },
+  "scripts": {
+    "start": "node runCodeV3.js",
+    "build-small": "pkg . --targets node18-win-x64 --out-path ./dist --output sheba-runcode-small.exe --config pkg-small.json"
+  },
+  "dependencies": {
+    "fs-extra": "^11.3.2",
+    "moment": "^2.30.1",
+    "mssql": "^10.0.0",
+    "nodemailer": "^6.10.1",
+    "pdf-parse": "^1.1.1",
+    "pdfkit": "^0.15.2",
+    "xlsx": "^0.18.5",
+    "yargs": "^17.7.2"
+  },
+  "pkg": {
+    "scripts": [
+      "runCodeV3.js"
+    ],
+    "assets": [
+      "*.js",
+      "*.json"
+    ],
+    "targets": [
+      "node18-win-x64"
+    ],
+    "outputPath": "./dist"
+  }
+}

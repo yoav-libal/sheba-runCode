@@ -1,0 +1,217 @@
+const _=global
+//ignoreAllByLibal
+//libalCodingHelper
+//Sheba
+//labDepartment
+
+/**
+ * Hebrew HTML Generation Test - Perfect Hebrew Support
+ * Generates HTML files that can be printed to PDF with perfect Hebrew rendering
+ */
+
+async function main(context) {
+    const { ColorLog, fsExtra, moment } = context;
+    
+    ColorLog.BW('🚀 Hebrew HTML Generation Test');
+    ColorLog.BW('==============================');
+    
+    try {
+        ColorLog.GW('✅ Generating HTML with perfect Hebrew support');
+        
+        // Create HTML content with proper Hebrew styling
+        const hebrewHtml = `<!DOCTYPE html>
+<html dir="rtl" lang="he">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hebrew Report - ${moment().format('DD/MM/YYYY')}</title>
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        
+        body {
+            font-family: 'Arial', 'Tahoma', sans-serif;
+            direction: rtl;
+            text-align: right;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+            background: white;
+        }
+        
+        .header {
+            text-align: center;
+            border-bottom: 2px solid #333;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .title {
+            font-size: 24px;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 10px;
+        }
+        
+        .subtitle {
+            font-size: 16px;
+            color: #666;
+        }
+        
+        .content {
+            margin: 20px 0;
+        }
+        
+        .section {
+            margin: 20px 0;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        
+        .section-title {
+            font-size: 18px;
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 10px;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 5px;
+        }
+        
+        .data-row {
+            margin: 8px 0;
+            padding: 5px 0;
+        }
+        
+        .label {
+            font-weight: bold;
+            color: #34495e;
+        }
+        
+        .value {
+            color: #2c3e50;
+        }
+        
+        .mixed {
+            direction: ltr;
+            text-align: left;
+            font-family: 'Courier New', monospace;
+            background: #f8f9fa;
+            padding: 10px;
+            border-radius: 3px;
+        }
+        
+        .footer {
+            margin-top: 40px;
+            text-align: center;
+            font-size: 12px;
+            color: #666;
+            border-top: 1px solid #ddd;
+            padding-top: 15px;
+        }
+        
+        @media print {
+            body { 
+                font-size: 12pt; 
+                background: white !important;
+            }
+            .no-print { display: none !important; }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="title">דוח מערכת RunCodeV3</div>
+        <div class="subtitle">Hebrew Report Generation Test</div>
+    </div>
+
+    <div class="content">
+        <div class="section">
+            <div class="section-title">פרטי הדוח</div>
+            <div class="data-row">
+                <span class="label">תאריך יצירה:</span> 
+                <span class="value">${moment().format('DD/MM/YYYY')}</span>
+            </div>
+            <div class="data-row">
+                <span class="label">שעת יצירה:</span> 
+                <span class="value">${moment().format('HH:mm:ss')}</span>
+            </div>
+            <div class="data-row">
+                <span class="label">גרסת מערכת:</span> 
+                <span class="value">${process.version}</span>
+            </div>
+            <div class="data-row">
+                <span class="label">פלטפורמה:</span> 
+                <span class="value">${process.platform}</span>
+            </div>
+        </div>
+
+        <div class="section">
+            <div class="section-title">בדיקת טקסט עברי</div>
+            <div class="data-row">שלום עולם - זהו מבחן ליצירת דוח בעברית</div>
+            <div class="data-row">אותיות עבריות: אבגדהוזחטיכלמנסעפצקרשת</div>
+            <div class="data-row">מספרים בעברית: אחד, שניים, שלושה, ארבעה, חמישה</div>
+            <div class="data-row">תאריכים: ${moment().format('dddd, DD בMMMM YYYY')}</div>
+        </div>
+
+        <div class="section">
+            <div class="section-title">טקסט מעורב</div>
+            <div class="mixed">
+                English + עברית mixed content<br>
+                Platform: ${process.platform}<br>
+                Node Version: ${process.version}<br>
+                Generated by: RunCodeV3 System
+            </div>
+        </div>
+
+        <div class="section">
+            <div class="section-title">הוראות הדפסה</div>
+            <div class="data-row">1. פתחו קובץ זה בדפדפן</div>
+            <div class="data-row">2. לחצו Ctrl+P או File > Print</div>
+            <div class="data-row">3. בחרו "Save as PDF" כמדפסת</div>
+            <div class="data-row">4. התוצאה תהיה PDF מושלם בעברית!</div>
+        </div>
+    </div>
+
+    <div class="footer">
+        <div>נוצר על ידי RunCodeV3 - מערכת ביצוע JavaScript עצמאית</div>
+        <div>Generated at: ${new Date().toISOString()}</div>
+    </div>
+
+    <div class="no-print" style="position: fixed; top: 10px; left: 10px; background: #007bff; color: white; padding: 10px; border-radius: 5px; font-family: Arial;">
+        <strong>💡 Tip:</strong> Press Ctrl+P to save as PDF with perfect Hebrew!
+    </div>
+</body>
+</html>`;
+
+        // Generate filename
+        const filename = `hebrew_report_${moment().format('YYYYMMDD_HHmmss')}.html`;
+        
+        // Save HTML file
+        await fsExtra.writeFile(filename, hebrewHtml, 'utf8');
+        
+        // Check file stats
+        const stats = await fsExtra.stat(filename);
+        
+        ColorLog.GW(`✅ Hebrew HTML report generated: ${filename}`);
+        ColorLog.GW(`📊 Size: ${stats.size} bytes`);
+        ColorLog.GB('🎯 PERFECT Hebrew Support Achieved!');
+        ColorLog.YB('📋 Open the HTML file in browser and print to PDF');
+        ColorLog.YB('   Hebrew text will render perfectly with RTL direction');
+        ColorLog.YB('   This is the ideal solution for Hebrew reports!');
+        
+        return {
+            success: true,
+            filename: filename,
+            size: stats.size,
+            method: 'HTML with perfect Hebrew support',
+            instructions: 'Open in browser and print to PDF for perfect Hebrew rendering'
+        };
+        
+    } catch (error) {
+        ColorLog.RW('❌ Hebrew HTML generation failed:', error.message);
+        return { success: false, error: error.message };
+    }
+}

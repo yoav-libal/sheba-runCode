@@ -1,0 +1,14 @@
+{
+  "user": "uMagicLabDBO",
+  "password": "SDFL#)4fms0#$kd2025",
+  "server": "SBWND182E",
+  "database": "labDepartment",
+  "testMode": true,
+  "options": {
+    "description": "Database configuration matching cleanTestV0DB.js parameters",
+    "connectionTimeout": 45000,
+    "requestTimeout": 45000,
+    "useUTC": true,
+    "encrypt": false
+  }
+}

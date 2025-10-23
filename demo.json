@@ -1,0 +1,40 @@
+{
+  "projectName": "Sheba RunCode Demo",
+  "version": "1.0.0",
+  "settings": {
+    "maxRetries": 3,
+    "timeout": 5000,
+    "enableLogging": true,
+    "logLevel": "verbose"
+  },
+  "database": {
+    "host": "demo-server",
+    "port": 1433,
+    "name": "demo_database",
+    "useSSL": false
+  },
+  "users": [
+    {
+      "id": 1,
+      "name": "John Doe",
+      "role": "admin",
+      "permissions": ["read", "write", "delete"]
+    },
+    {
+      "id": 2,
+      "name": "Jane Smith", 
+      "role": "user",
+      "permissions": ["read"]
+    }
+  ],
+  "features": {
+    "exportExcel": true,
+    "emailNotifications": false,
+    "autoBackup": true
+  },
+  "calculations": {
+    "baseValue": 100,
+    "multiplier": 1.5,
+    "discount": 0.1
+  }
+}

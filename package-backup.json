@@ -1,0 +1,63 @@
+{
+  "name": "sheba-runcode",
+  "version": "1.0.0",
+  "description": "Sheba RunCode Project - JavaScript Sandbox Executor",
+  "main": "runCodeV3.js",
+  "scripts": {
+    "start": "node runCodeV3.js",
+    "test": "node runCodeV3.js -f cleanTestV0DB.js",
+    "build": "pkg . --out-path ./dist",
+    "build-win": "pkg . --targets node18-win-x64 --out-path ./dist",
+    "build-nexe": "nexe runCodeV3.js --output ./dist/runCodeV3-nexe.exe --target windows-x64-18.20.4",
+    "build-all": "npm run build-win && npm run build-nexe"
+  },
+  "keywords": [
+    "sheba",
+    "runcode",
+    "sandbox",
+    "javascript"
+  ],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "fs-extra": "^11.3.2",
+    "html-pdf": "^3.0.1",
+    "jspdf": "^3.0.3",
+    "moment": "^2.30.1",
+    "mssql": "^10.0.0",
+    "nodemailer": "^6.10.1",
+    "pdf-parse": "^1.1.1",
+    "pdfkit": "^0.15.2",
+    "puppeteer": "^24.26.0",
+    "xlsx": "^0.18.5",
+    "xlsx-calc": "^0.5.1",
+    "yargs": "^17.7.2"
+  },
+  "devDependencies": {
+    "@vercel/ncc": "^0.38.3",
+    "nexe": "^4.1.0",
+    "pkg": "^5.8.1"
+  },
+  "pkg": {
+    "scripts": [
+      "runCodeV3.js",
+      "node_modules/**/*.js"
+    ],
+    "assets": [
+      "node_modules/**/*",
+      "*.js",
+      "*.json",
+      "*.txt",
+      "*.md"
+    ],
+    "targets": [
+      "node18-win-x64"
+    ],
+    "outputPath": "./dist"
+  },
+  "devDependencies": {
+    "@vercel/ncc": "^0.38.4",
+    "nexe": "^5.0.0-beta.4",
+    "pkg": "^5.8.1"
+  }
+}

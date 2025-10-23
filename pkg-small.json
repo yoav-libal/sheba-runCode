@@ -1,0 +1,13 @@
+{
+  "scripts": [
+    "runCodeV3.js"
+  ],
+  "assets": [
+    "*.js",
+    "*.json"
+  ],
+  "targets": [
+    "node18-win-x64"
+  ],
+  "outputPath": "./dist"
+}

@@ -1,0 +1,22 @@
+{
+  "timestamp": "2025-10-21 14:19:50",
+  "summary": {
+    "projectName": "Sheba RunCode Demo",
+    "version": "1.0.0",
+    "totalUsers": 2,
+    "featuresEnabled": 2,
+    "calculations": {
+      "baseValue": 100,
+      "beforeDiscount": 150,
+      "discountAmount": 15,
+      "finalValue": 135
+    }
+  },
+  "processingDetails": {
+    "hasSettings": true,
+    "hasDatabase": true,
+    "hasUsers": true,
+    "hasFeatures": true,
+    "hasCalculations": true
+  }
+}

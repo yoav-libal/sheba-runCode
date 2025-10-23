@@ -1,0 +1,68 @@
+{
+  "name": "sheba-runcode",
+  "version": "1.0.0",
+  "description": "Sheba RunCode Project - JavaScript Sandbox Executor",
+  "main": "runCodeV3.js",
+  "bin": {
+    "sheba-runcode": "./runCodeV3.js",
+    "sheba-runcode-lite": "./runCodeV3-lite.js"
+  },
+  "scripts": {
+    "start": "node runCodeV3.js",
+    "test": "node runCodeV3.js -f cleanTestV0DB.js",
+    "build": "pkg . --out-path ./dist",
+    "build-win": "pkg . --targets node18-win-x64 --out-path ./dist",
+    "build-lite": "pkg runCodeV3-lite.js --targets node18-win-x64 --out-path ./dist --output sheba-runcode-lite.exe",
+    "build-optimized": "pkg . --targets node18-win-x64 --out-path ./dist --config pkg-optimized.json",
+    "build-all": "npm run build-lite && npm run build-optimized"
+  },
+  "keywords": [
+    "sheba",
+    "runcode",
+    "sandbox",
+    "javascript"
+  ],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "fs-extra": "^11.3.2",
+    "html-pdf": "^3.0.1",
+    "jspdf": "^3.0.3",
+    "moment": "^2.30.1",
+    "mssql": "^10.0.0",
+    "nodemailer": "^6.10.1",
+    "pdf-parse": "^1.1.1",
+    "pdfkit": "^0.15.2",
+    "puppeteer": "^24.26.0",
+    "xlsx": "^0.18.5",
+    "xlsx-calc": "^0.5.1",
+    "yargs": "^17.7.2"
+  },
+  "devDependencies": {
+    "@vercel/ncc": "^0.38.4",
+    "nexe": "^5.0.0-beta.4",
+    "pkg": "^5.8.1"
+  },
+  "pkg": {
+    "scripts": [
+      "runCodeV3.js",
+      "node_modules/moment/**/*.js",
+      "node_modules/yargs/**/*.js", 
+      "node_modules/fs-extra/**/*.js",
+      "node_modules/xlsx/**/*.js",
+      "node_modules/pdf-parse/**/*.js",
+      "node_modules/pdfkit/**/*.js",
+      "node_modules/mssql/**/*.js"
+    ],
+    "assets": [
+      "*.js",
+      "*.json",
+      "node_modules/pdfkit/js/data/**/*",
+      "node_modules/moment/locale/*.js"
+    ],
+    "targets": [
+      "node18-win-x64"
+    ],
+    "outputPath": "./dist"
+  }
+}
