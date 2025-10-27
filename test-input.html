@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test HTML to PDF - No Chrome Required!</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            direction: rtl;
+            text-align: right;
+        }
+        .header {
+            background-color: #2196F3;
+            color: white;
+            padding: 20px;
+            text-align: center;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+        .content {
+            line-height: 1.6;
+            padding: 20px;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+        }
+        .success {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px;
+            text-align: center;
+            border-radius: 5px;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>🚀 PDF Conversion Test</h1>
+        <h2>Works Regardless of Chrome Installation!</h2>
+    </div>
+    
+    <div class="content">
+        <h3>Multi-Fallback Browser System</h3>
+        <p><strong>Method 1:</strong> Bundled Chromium (@sparticuz/chromium) - Always available!</p>
+        <p><strong>Method 2:</strong> System Chrome - If installed</p>
+        <p><strong>Method 3:</strong> Default Puppeteer - Last resort</p>
+        
+        <h3>Hebrew Text Test</h3>
+        <p>שלום עולם! זהו טקסט בעברית לבדיקת התמיכה ב-RTL.</p>
+        <p>הטקסט צריך להיות מיושר לימין ולהיראות כראוי ב-PDF.</p>
+        
+        <h3>English Text Test</h3>
+        <p>Hello World! This is English text to test mixed-language support.</p>
+        <p>The PDF converter should handle both Hebrew and English correctly.</p>
+    </div>
+    
+    <div class="success">
+        ✅ If you can see this as a PDF, the conversion worked perfectly!
+    </div>
+</body>
+</html>

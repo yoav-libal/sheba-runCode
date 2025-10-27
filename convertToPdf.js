@@ -14,8 +14,8 @@ async function main() {
     console.log('========================');
     
     // Parse command line arguments
-    const inputFile = argv.inputHtml || 'input.html';
-    const outputFile = argv.outputPdf || 'output.pdf';
+    const inputFile = argv.inputHtml || 'test-input.html';
+    const outputFile = argv.outputPdf || 'test-output.pdf';
     
     console.log(`📄 Input HTML: ${inputFile}`);
     console.log(`📊 Output PDF: ${outputFile}`);
@@ -26,32 +26,14 @@ async function main() {
         const htmlContent = await fsExtra.readFile(inputFile, 'utf8');
         console.log(`✅ Read ${htmlContent.length} characters from HTML file`);
         
-        // Find Chrome installation
-        const possibleChromePaths = [
-            'C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe',
-            'C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe',
-            'C:\\Users\\' + (process.env.USERNAME || 'User') + '\\AppData\\Local\\Google\\Chrome\\Application\\chrome.exe'
-        ];
+        // Use ONLY bundled Chromium - DIE ON FAIL!
+        console.log('🌐 Launching bundled Chromium browser...');
         
-        let chromeExecutablePath = null;
-        for (const path of possibleChromePaths) {
-            if (await fsExtra.pathExists(path)) {
-                chromeExecutablePath = path;
-                break;
-            }
-        }
-        
-        if (!chromeExecutablePath) {
-            throw new Error('Google Chrome not found. Please install Google Chrome.');
-        }
-        
-        console.log('🌐 Launching Chrome browser...');
-        
-        // Launch Chrome
         const browser = await puppeteerCore.launch({
             headless: true,
-            executablePath: chromeExecutablePath,
+            executablePath: await chromium.executablePath,
             args: [
+                ...chromium.args,
                 '--no-sandbox',
                 '--disable-setuid-sandbox',
                 '--disable-dev-shm-usage',
@@ -60,6 +42,8 @@ async function main() {
                 '--disable-gpu'
             ]
         });
+        
+        console.log('✅ Bundled Chromium launched successfully');
         
         // Create new page
         const page = await browser.newPage();
