@@ -25,8 +25,7 @@ class ModuleLoader {
             { name: 'fs-extra', alias: 'fsExtra' },
             { name: 'xlsx', alias: 'XLSX' },
             { name: 'xlsx-calc', alias: 'XLSX_CALC' },
-            { name: 'puppeteer-core', alias: 'puppeteerCore' },
-            { name: '@sparticuz/chromium', alias: 'chromium' },
+            { name: 'pdf2json', alias: 'pdf2json' },
             { name: 'nodemailer', alias: 'nodemailer' },
             { name: 'child_process', alias: 'childProcess', isBuiltIn: true }
         ];
@@ -38,7 +37,7 @@ class ModuleLoader {
         // Add additional utilities
         this.addUtilities();
 
-        ColorLog.GW(`✅ Successfully loaded ${this.loadedModules.size} modules`);
+        //ColorLog.GW(`✅ Successfully loaded ${this.loadedModules.size} modules`);
         
         if (this.failedModules.size > 0) {
             ColorLog.RW(`❌ Failed to load ${this.failedModules.size} modules:`, Array.from(this.failedModules));
@@ -55,7 +54,7 @@ class ModuleLoader {
         const { name, alias, isBuiltIn = false } = moduleInfo;
         
         try {
-            ColorLog.WB(`Loading ${name}...`);
+            //ColorLog.WB(`Loading ${name}...`);
             
             if (isBuiltIn) {
                 this.modules[alias] = require(name);
@@ -64,7 +63,7 @@ class ModuleLoader {
             }
             
             this.loadedModules.add(name);
-            ColorLog.GW(`✅ ${name} loaded as '${alias}'`);
+            //ColorLog.GW(`✅ ${name} loaded as '${alias}'`);
             
         } catch (error) {
             this.failedModules.add(name);
@@ -114,8 +113,11 @@ class ModuleLoader {
         // Add excel alias for XLSX
         this.modules.excel = this.modules.XLSX;
 
-        // Add utility aliases and PDF modules
+        // Add utility aliases
         this.modules.htmlGenerator = this.modules.fsExtra; // For HTML file generation
+        
+        // Add PDF reading aliases
+        this.modules.pdfReader = this.modules.pdf2json;
         
         // Add email aliases
         this.modules.emailSender = this.modules.nodemailer;
@@ -124,7 +126,10 @@ class ModuleLoader {
         // Add ColorLog
         this.modules.ColorLog = ColorLog;
 
-        ColorLog.BW('📦 Added utility aliases, email modules, and ColorLog');
+        //ColorLog.BW('📦 Added utility aliases and email modules');
+
+        //ColorLog.BW('');
+        //ColorLog.BW('📋 Optimized build - HTML to PDF conversion via convertHTML2PDF.exe');
     }
 
     /**
@@ -149,20 +154,30 @@ class ModuleLoader {
             return false;
         }
         
-        // Note: PDF modules removed for ultra-lightweight build
-        ColorLog.BW('📋 Ultra-lightweight build - PDF generation via HTML output');
+        // Check PDF modules (important but not critical)
+        const pdfModules = ['pdf2json'];
+        const missingPdf = pdfModules.filter(name => !this.modules[name]);
+        
+        if (missingPdf.length > 0) {
+            ColorLog.YW('⚠️  PDF modules missing (non-critical):', missingPdf);
+        } else {
+            //ColorLog.GW('✅ PDF reading modules loaded successfully');
+        }
 
         // Check email modules (important but not critical)
         const emailModules = ['nodemailer'];
         const missingEmail = emailModules.filter(name => !this.modules[name]);
         
         if (missingEmail.length > 0) {
-            ColorLog.YW('⚠️  Email modules missing (non-critical):', missingEmail);
+            //ColorLog.YW('⚠️  Email modules missing (non-critical):', missingEmail);
         } else {
-            ColorLog.GW('✅ Email modules loaded successfully');
+            //ColorLog.GW('✅ Email modules loaded successfully');
         }
         
-        ColorLog.GW('✅ All critical modules loaded successfully');
+        //ColorLog.GW('✅ All critical modules loaded successfully');
+        
+        // Note: HTML to PDF conversion handled by external convertHTML2PDF.exe
+        ColorLog.BW('📋 Optimized build - HTML to PDF conversion via external exe');
         return true;
     }
 

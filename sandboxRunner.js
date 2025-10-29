@@ -191,22 +191,41 @@ class SandboxRunner {
      * @returns {string} Wrapped code
      */
     wrapCodeForExecution(code) {
+        // Security fix: Replace main function signature to prevent context parameter access
+        // Replace any "async function main([anything])" with "async function main()"
+        let secureCode = code.replace(
+            /async\s+function\s+main\s*\([^)]*\)/g,
+            'async function main()'
+        );
+        
+        // Add mandatory context destructuring at the beginning of main function
+        // This forces scripts to explicitly know all module names
+        secureCode = secureCode.replace(
+            /(async\s+function\s+main\s*\(\s*\)\s*{)/,
+            `$1
+    const { sql, moment, argv, fsExtra, ColorLog, excel, XLSX, XLSX_CALC, execSync, 
+            pdf2json, pdfReader, nodemailer, emailSender, mailer, 
+            dbConnect, dbClose, executeQuery, processDbParameters, process, console, global } = context;`
+        );
+        
         return `
 (async function() {
     try {
-        // Execute the original code
-        ${code}
+        // Make context available but hidden - scripts must know the exact structure
+        const context = {
+            sql, moment, argv, fsExtra, ColorLog, excel, XLSX, XLSX_CALC, execSync,
+            pdf2json, pdfReader,
+            nodemailer, emailSender, mailer,
+            dbConnect, dbClose, executeQuery, processDbParameters,
+            process, console, global
+        };
         
-        // If there's a main function, call it with context
+        // Execute the original code with injected destructuring
+        ${secureCode}
+        
+        // If there's a main function, call it without parameters
         if (typeof main === 'function') {
-            const context = {
-                sql, moment, argv, fsExtra, ColorLog, excel, XLSX, XLSX_CALC, execSync,
-                puppeteerCore, chromium,
-                nodemailer, emailSender, mailer,
-                dbConnect, dbClose, executeQuery, processDbParameters,
-                process, console, global
-            };
-            return await main(context);
+            return await main();
         }
         
         // If no main function, just return the module.exports

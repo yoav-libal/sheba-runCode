@@ -1,5 +1,7 @@
 node_modules
 
 # Executable files
+*.exe
 runcodev3.exe
+convertHTML2PDF.exe
 dist/

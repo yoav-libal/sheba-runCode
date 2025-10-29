@@ -1,8 +1,15 @@
+const _=global
+//ignoreAllByLibal
+//libalCodingHelper
+//Sheba
+//labDepartment
+
 // sendMail.js - Email sending test with SMTP, Hebrew support, and file attachments
 // Usage: node runCodeV3.js -f sendMail.js --file mailIt.json
 
-async function main(context) {
-    const { nodemailer, emailSender, mailer, fsExtra, ColorLog, moment, argv } = context;
+async function main() {
+    // Modules are automatically injected by runCodeV3 - no manual destructuring needed
+    // This script will only work with runCodeV3, not with regular node.exe
     
     try {
         ColorLog.BW('📧 Starting Email Sending Test');
@@ -162,7 +169,9 @@ async function prepareEmailContent(config, fsExtra, ColorLog, moment) {
         html: htmlContent,
         encoding: 'utf8', // Ensure UTF-8 for Hebrew support
         headers: {
-            'Content-Type': 'text/html; charset=UTF-8'
+            'Content-Type': 'text/html; charset=UTF-8',
+            'Content-Language': 'he',
+            'X-Priority': '3'
         }
     };
     

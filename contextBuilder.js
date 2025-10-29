@@ -20,8 +20,7 @@ class ContextBuilder {
      * @returns {Object} Complete execution context
      */
     async buildContext(argv, targetFile, extraParamFile = null) {
-        ColorLog.BW('🔧 Building execution context...');
-
+        
         try {
             // Start with base modules
             this.context = { ...this.modules };
@@ -40,7 +39,7 @@ class ContextBuilder {
             // Add execution utilities
             this.addExecutionUtilities();
 
-            ColorLog.GW('✅ Context built successfully');
+            //ColorLog.GW('✅ Context built successfully');
             this.logContextSummary();
 
             return this.context;

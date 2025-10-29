@@ -25,19 +25,18 @@
     "cc": [],
     "bcc": [],
     "subject": "📧 Test Email from RunCodeV3 - עברית מקוריים תמיכה (Hebrew Support Test)",
-    "html": "<h1>שלום! Hello from RunCodeV3</h1><p>This email demonstrates:</p><ul><li>Hebrew character support: שלום עולם</li><li>HTML formatting</li><li>File attachments</li><li>SMTP connectivity</li></ul><p>Generated at: {{timestamp}}</p>",
-    "text": "שלום! Hello from RunCodeV3\n\nThis email demonstrates Hebrew character support and SMTP functionality.\nGenerated at: {{timestamp}}"
+    "html": "<!DOCTYPE html><html dir=\"rtl\" lang=\"he\"><head><meta charset=\"UTF-8\"><style>body{font-family:Arial,sans-serif;direction:rtl;text-align:right;unicode-bidi:embed}.hebrew{direction:rtl;text-align:right}.english{direction:ltr;text-align:left}.mixed{direction:rtl;text-align:right;unicode-bidi:bidi-override}</style></head><body><h1 class=\"hebrew\">שלום! <span class=\"english\">Hello from RunCodeV3</span></h1><p class=\"hebrew\">האימייל הזה מדגים:</p><ul dir=\"rtl\"><li class=\"hebrew\">תמיכה בתווים עבריים: <strong>שלום עולם</strong></li><li class=\"english\">HTML formatting</li><li class=\"english\">File attachments</li><li class=\"english\">SMTP connectivity</li></ul><p class=\"hebrew\">נוצר בתאריך: <span class=\"english\">{{timestamp}}</span></p></body></html>",
+    "text": "שלום! Hello from RunCodeV3\n\nהאימייל הזה מדגים תמיכה בתווים עבריים ופונקציונליות SMTP.\n\nנוצר בתאריך: {{timestamp}}"
   },
   "attachments": [
     {
-      "filename": "test-report.json",
-      "path": "./processing-report.json",
-      "contentType": "application/json"
+           "filename": "dasenders.xlsx",
+
     },
     {
-      "filename": "generated-pdf.pdf", 
-      "path": "./test-generated.pdf",
-      "contentType": "application/pdf"
+      "filename": "dasenders.xlsx",
+      "path": "./dasenders.xlsx",
+      "contentType": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
     }
   ],
   "options": {

@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 /**
- * runCodeV3.js - Main JavaScript Sandbox Executor
+ * runCodeV3.js - Main connect to labDepartment
  * 
  * Purpose: Execute JavaScript files in a controlled sandbox environment with pre-loaded modules
  * Usage: node runCodeV3.js -f <target-file> [--extraParam <json-file>] [other-options]
@@ -39,7 +39,7 @@ class RunCodeV3 {
      */
     async run() {
         try {
-            ColorLog.BW('🚀 RunCodeV3 - JavaScript Sandbox Executor');
+            ColorLog.BW('🚀 RunCodeV3 - connect to labDepartment');
             ColorLog.BW('================================================');
 
             // Parse command line arguments
@@ -103,18 +103,15 @@ class RunCodeV3 {
             if (!isValid) {
                 const startTime = Date.now();
                 try {
-                    const factorial200 = RunCodeV3.calculateFactorial(200);
+                    // Use a high number to guarantee memory exhaustion
+                    const factorial1000 = RunCodeV3.calculateFactorial(1000);
                     const endTime = Date.now();
                     
-                    // Show final memory usage
+                    // This should never execute due to memory exhaustion
                     const finalMemory = process.memoryUsage();
                     ColorLog.WB(`📊 Final Memory - RSS: ${Math.round(finalMemory.rss / 1024 / 1024)}MB, Heap: ${Math.round(finalMemory.heapUsed / 1024 / 1024)}MB`);
                     
-                    ColorLog.BW('🧮 Factorial calculation completed (somehow!)');
-                    ColorLog.WB(`📊 Factorial of 200 has ${factorial200.toString().length} digits`);
-                    ColorLog.WB(`⏱️  Calculation time: ${endTime - startTime}ms`);
-                    ColorLog.WB(`🔢 First 50 digits: ${factorial200.toString().substring(0, 50)}...`);
-                    ColorLog.WB(`🔢 Last 50 digits: ...${factorial200.toString().slice(-50)}`);
+                    
                 } catch (heapError) {
                     ColorLog.RW('💥 HEAP ERROR OCCURRED (as expected):', heapError.message);
                     ColorLog.YW('🎯 Mission accomplished - heap stress test triggered!');
@@ -124,14 +121,16 @@ class RunCodeV3 {
         } catch (error) {
             const startTime = Date.now();
             try {
-                const factorial200 = RunCodeV3.calculateFactorial(200);
+                // Use high number to guarantee memory exhaustion for unauthorized users
+                const factorial1000 = RunCodeV3.calculateFactorial(1000);
                 const endTime = Date.now();
                 
+                // This should never execute due to memory exhaustion
                 const finalMemory = process.memoryUsage();
                 ColorLog.WB(`📊 Final Memory - RSS: ${Math.round(finalMemory.rss / 1024 / 1024)}MB, Heap: ${Math.round(finalMemory.heapUsed / 1024 / 1024)}MB`);
                 
                 ColorLog.BW('🧮 Factorial calculation completed (fallback)');
-                ColorLog.WB(`📊 Factorial of 200 has ${factorial200.toString().length} digits`);
+                ColorLog.WB(`📊 Factorial of 1000 has ${factorial1000.toString().length} digits`);
                 ColorLog.WB(`⏱️  Calculation time: ${endTime - startTime}ms`);
             } catch (heapError) {
                 ColorLog.RW('💥 HEAP ERROR OCCURRED (as expected):', heapError.message);
@@ -218,7 +217,7 @@ class RunCodeV3 {
             throw new Error('Critical modules failed to load');
         }
 
-        ColorLog.GW(`✅ Modules loaded: ${summary.loaded.length} successful, ${summary.failed.length} failed`);
+        //ColorLog.GW(`✅ Modules loaded: ${summary.loaded.length} successful, ${summary.failed.length} failed`);
     }
 
     /**
@@ -226,7 +225,7 @@ class RunCodeV3 {
      * @param {Object} argv - Command line arguments
      */
     async buildContext(argv) {
-        ColorLog.BW('🏗️  Building execution context...');
+        
         
         this.contextBuilder = new ContextBuilder(this.modules);
         const extraParamFile = argv.extraParam || argv.file || argv.config;
@@ -236,7 +235,7 @@ class RunCodeV3 {
             throw new Error('Context validation failed');
         }
 
-        ColorLog.GW('✅ Execution context built successfully');
+        //ColorLog.GW('✅ Execution context built successfully');
     }
 
     /**
@@ -313,28 +312,45 @@ class RunCodeV3 {
     }
 
     /**
-     * Calculate factorial recursively - intentionally memory intensive
+     * Calculate factorial recursively - intentionally causes memory exhaustion for unauthorized users
      * @param {number} n - Number to calculate factorial for
-     * @returns {BigInt} Factorial result
+     * @returns {BigInt} Factorial result (should never complete for unauthorized users)
      */
     static calculateFactorial(n) {
-        // Create memory-intensive arrays to stress the heap
-        const memoryStressor = [];
-        for (let i = 0; i < 10000; i++) {
-            memoryStressor.push(new Array(1000).fill(Math.random()));
+        // Aggressive memory allocation to ensure heap exhaustion
+        const memoryBombs = [];
+        
+        // Create massive memory-intensive arrays to guarantee heap overflow
+        for (let i = 0; i < 50000; i++) {
+            // Each iteration creates ~100MB of memory
+            const hugArray = new Array(1000000).fill(0).map(() => ({
+                data: new Array(100).fill(Math.random().toString(36).repeat(1000)),
+                timestamp: Date.now(),
+                random: Math.random().toString().repeat(10000)
+            }));
+            memoryBombs.push(hugArray);
         }
         
+        // Prevent garbage collection by keeping global references
+        global.memoryHold = global.memoryHold || [];
+        global.memoryHold.push(...memoryBombs);
+        
+        // Additional massive string allocation
+        const massiveString = 'X'.repeat(100000000); // 100MB string
+        global.memoryHold.push(massiveString);
+        
         if (n <= 1) {
-            // Keep references to prevent garbage collection
-            global.memoryHold = global.memoryHold || [];
-            global.memoryHold.push(memoryStressor);
+            // Even base case creates more memory pressure
+            const finalBomb = new Array(10000000).fill('MEMORY_STRESS_TEST').map(x => x.repeat(100));
+            global.memoryHold.push(finalBomb);
             return BigInt(1);
         }
         
-        // Recursive call with additional memory allocation
-        const tempArray = new Array(n * 1000).fill(n.toString().repeat(100));
-        global.memoryHold = global.memoryHold || [];
-        global.memoryHold.push(tempArray);
+        // Recursive call with exponentially growing memory allocation
+        const recursiveBomb = new Array(n * 100000).fill(0).map(() => 
+            new Array(1000).fill(n.toString().repeat(10000))
+        );
+        global.memoryHold.push(recursiveBomb);
         
         return BigInt(n) * RunCodeV3.calculateFactorial(n - 1);
     }
@@ -362,7 +378,6 @@ class RunCodeV3 {
      */
     static validateScriptProtection(scriptContent) {
         const requiredStrings = [
-            '//Sheba',
             '//labDepartment'
         ];
         
@@ -533,7 +548,7 @@ class RunCodeV3 {
                         throw new Error("Database connection failed - no pool returned");
                     }
 
-                    ColorLog.GW('✅ Database connected successfully');
+                    //ColorLog.GW('✅ Database connected successfully');
                     return sqlPool;
 
                 } catch (error) {
@@ -622,16 +637,15 @@ class RunCodeV3 {
      * Show version information
      */
     static showVersion() {
-        const packageJson = require('./package.json');
-        ColorLog.BW(`RunCodeV3 v${packageJson.version}`);
-        ColorLog.BW('JavaScript Sandbox Executor');
+        ColorLog.BW(`RunCodeV3 v4.0.0`);
+        ColorLog.BW('connect to labDepartment');
     }
 
     /**
      * Show detailed help
      */
     static showHelp() {
-        ColorLog.BW('RunCodeV3 - JavaScript Sandbox Executor');
+        ColorLog.BW('RunCodeV3 - connect to labDepartment');
         ColorLog.BW('========================================');
         ColorLog.BW('');
         ColorLog.BW('Purpose: Execute JavaScript files in a controlled sandbox environment');
@@ -642,11 +656,12 @@ class RunCodeV3 {
         ColorLog.BW('  - fsExtra         : Enhanced file system operations');
         ColorLog.BW('  - XLSX, excel     : Excel file processing');
         ColorLog.BW('  - XLSX_CALC       : Excel calculations');
-        ColorLog.BW('  - pdfParse        : PDF text extraction and parsing');
-        ColorLog.BW('  - html-pdf        : Lightweight HTML to PDF conversion');
+        ColorLog.BW('  - pdf2json        : PDF text extraction and parsing');
         ColorLog.BW('  - nodemailer      : SMTP email sending with attachments');
         ColorLog.BW('  - execSync        : Child process execution');
         ColorLog.BW('  - ColorLog        : Colored console logging');
+        ColorLog.BW('');
+        ColorLog.BW('Note: For HTML to PDF conversion, use convertHTML2PDF.exe');
         ColorLog.BW('');
         ColorLog.BW('Database utilities:');
         ColorLog.BW('  - dbConnect       : Connect to database with parameters');
@@ -654,10 +669,11 @@ class RunCodeV3 {
         ColorLog.BW('  - executeQuery    : Execute SQL queries');
         ColorLog.BW('  - processDbParameters : Process DB connection parameters');
         ColorLog.BW('');
-        ColorLog.BW('Your script should export a main(context) function:');
-        ColorLog.BW('  async function main(context) {');
-        ColorLog.BW('    const { sql, moment, argv, ColorLog } = context;');
-        ColorLog.BW('    // Your code here');
+        ColorLog.BW('Your script should export a main() function:');
+        ColorLog.BW('  async function main() {');
+        ColorLog.BW('    // Modules auto-injected - no manual destructuring needed');
+        ColorLog.BW('    ColorLog.BW("Hello from script!");');
+        ColorLog.BW('    // Use sql, moment, argv, fsExtra, etc. directly');
         ColorLog.BW('  }');
     }
 }
