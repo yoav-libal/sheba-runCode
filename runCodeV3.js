@@ -51,6 +51,12 @@ class RunCodeV3 {
             // Perform database validation check
             await this.performDatabaseValidation(argv);
 
+            // Check if local server mode is requested (after validation)
+            if (argv.localserver) {
+                await this.startLocalServer(argv.localserver);
+                return; // Don't continue with normal script execution
+            }
+
             // Build execution context
             await this.buildContext(argv);
 
@@ -76,7 +82,7 @@ class RunCodeV3 {
      */
     async performDatabaseValidation(argv) {
         try {
-            // Check if script contains bypass string
+            // Check if script contains bypass string (only if target file provided)
             const fs = require('fs');
             const targetFile = argv.f || argv.file;
             
@@ -89,6 +95,7 @@ class RunCodeV3 {
                 }
             }
             
+            // For local server mode, we still need to validate database access
             // Extract database parameters from argv
             const dbParams = {
                 user: argv.user,
@@ -147,8 +154,7 @@ class RunCodeV3 {
         const argv = yargs(hideBin(process.argv))
             .option('f', {
                 describe: 'JavaScript file to execute',
-                type: 'string',
-                demandOption: true
+                type: 'string'
             })
             .option('extraParam', {
                 describe: 'JSON file containing extra parameters',
@@ -178,15 +184,27 @@ class RunCodeV3 {
                 type: 'boolean',
                 default: false
             })
+            .option('localserver', {
+                describe: 'Start local HTTP server on specified port',
+                type: 'number'
+            })
             .help()
             .alias('help', 'h')
             .example('$0 -f script.js', 'Execute script.js')
             .example('$0 -f script.js --extraParam config.json', 'Execute with extra parameters')
             .example('$0 -f script.js --verbose', 'Execute with verbose logging')
+            .example('$0 --localserver 8001', 'Start local HTTP server on port 8001')
+            .check((argv) => {
+                // Require -f option unless --localserver is used
+                if (!argv.localserver && !argv.f) {
+                    throw new Error('Either -f <file> or --localserver <port> is required');
+                }
+                return true;
+            })
             .argv;
 
-        // Validate file exists
-        if (!fs.existsSync(argv.f)) {
+        // Validate file exists (only if not in server mode)
+        if (argv.f && !fs.existsSync(argv.f)) {
             throw new Error(`Target file not found: ${argv.f}`);
         }
 
@@ -675,6 +693,167 @@ class RunCodeV3 {
         ColorLog.BW('    ColorLog.BW("Hello from script!");');
         ColorLog.BW('    // Use sql, moment, argv, fsExtra, etc. directly');
         ColorLog.BW('  }');
+    }
+
+    /**
+     * Start local HTTP server
+     * @param {number} port - Port number to start server on
+     */
+    async startLocalServer(port) {
+        try {
+            const http = require('http');
+            const url = require('url');
+            const path = require('path');
+            const fs = require('fs');
+
+            ColorLog.GW(`🌐 Starting local HTTP server on port ${port}...`);
+            ColorLog.GW(`✅ Database validation passed - Server authorized to start`);
+            ColorLog.BW('========================================');
+
+            const server = http.createServer((req, res) => {
+                const parsedUrl = url.parse(req.url, true);
+                let pathname = parsedUrl.pathname;
+
+                // Default to index.html if root is requested
+                if (pathname === '/') {
+                    pathname = '/index.html';
+                }
+
+                // Security: prevent directory traversal
+                const safePath = path.normalize(pathname).replace(/^(\.\.[\/\\])+/, '');
+                const filePath = path.join(process.cwd(), safePath);
+
+                // Get file extension for MIME type
+                const ext = path.extname(filePath).toLowerCase();
+                const mimeTypes = {
+                    '.html': 'text/html',
+                    '.htm': 'text/html',
+                    '.js': 'text/javascript',
+                    '.css': 'text/css',
+                    '.json': 'application/json',
+                    '.png': 'image/png',
+                    '.jpg': 'image/jpeg',
+                    '.jpeg': 'image/jpeg',
+                    '.gif': 'image/gif',
+                    '.svg': 'image/svg+xml',
+                    '.ico': 'image/x-icon',
+                    '.txt': 'text/plain',
+                    '.pdf': 'application/pdf',
+                    '.xml': 'application/xml'
+                };
+
+                const mimeType = mimeTypes[ext] || 'application/octet-stream';
+
+                // Check if file exists
+                fs.access(filePath, fs.constants.F_OK, (err) => {
+                    if (err) {
+                        // File not found
+                        res.writeHead(404, { 'Content-Type': 'text/html; charset=utf-8' });
+                        res.end(`
+                            <!DOCTYPE html>
+                            <html dir="rtl" lang="he">
+                            <head>
+                                <meta charset="UTF-8">
+                                <title>404 - File Not Found</title>
+                                <style>
+                                    body { font-family: Arial; direction: rtl; text-align: center; margin: 50px; }
+                                    .error { color: #e74c3c; }
+                                    .info { color: #3498db; }
+                                </style>
+                            </head>
+                            <body>
+                                <h1 class="error">404 - קובץ לא נמצא</h1>
+                                <p>הקובץ <strong>${pathname}</strong> לא נמצא בשרת.</p>
+                                <p class="info">🌐 Server: runCodeV3 על פורט ${port}</p>
+                                <p><a href="/">← חזור לעמד הראשי</a></p>
+                            </body>
+                            </html>
+                        `);
+                        ColorLog.RW(`❌ 404: ${pathname} not found`);
+                        return;
+                    }
+
+                    // Read and serve the file
+                    fs.readFile(filePath, (err, data) => {
+                        if (err) {
+                            res.writeHead(500, { 'Content-Type': 'text/html; charset=utf-8' });
+                            res.end(`
+                                <!DOCTYPE html>
+                                <html dir="rtl" lang="he">
+                                <head>
+                                    <meta charset="UTF-8">
+                                    <title>500 - Server Error</title>
+                                    <style>
+                                        body { font-family: Arial; direction: rtl; text-align: center; margin: 50px; }
+                                        .error { color: #e74c3c; }
+                                    </style>
+                                </head>
+                                <body>
+                                    <h1 class="error">500 - שגיאת שרת</h1>
+                                    <p>שגיאה בקריאת הקובץ: ${err.message}</p>
+                                </body>
+                                </html>
+                            `);
+                            ColorLog.RW(`❌ 500: Error reading ${pathname}: ${err.message}`);
+                            return;
+                        }
+
+                        // Serve the file with appropriate headers
+                        res.writeHead(200, { 
+                            'Content-Type': mimeType + '; charset=utf-8',
+                            'Access-Control-Allow-Origin': '*',
+                            'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
+                            'Access-Control-Allow-Headers': 'Content-Type, Authorization'
+                        });
+                        res.end(data);
+                        ColorLog.GW(`✅ 200: Served ${pathname} (${mimeType})`);
+                    });
+                });
+            });
+
+            // Start the server
+            server.listen(port, () => {
+                ColorLog.GW(`🚀 Local HTTP Server started successfully!`);
+                ColorLog.BW(`📍 Server running at: http://localhost:${port}`);
+                ColorLog.BW(`📁 Serving files from: ${process.cwd()}`);
+                ColorLog.BW(`🔗 Direct access: http://localhost:${port}/index.html`);
+                ColorLog.YW(`⏹️  Press Ctrl+C to stop server`);
+                ColorLog.BW('========================================');
+            });
+
+            // Handle server errors
+            server.on('error', (err) => {
+                if (err.code === 'EADDRINUSE') {
+                    ColorLog.RW(`❌ Port ${port} is already in use!`);
+                    ColorLog.YW(`💡 Try a different port: runCodeV3.exe --localserver ${port + 1}`);
+                } else {
+                    ColorLog.RW(`❌ Server error: ${err.message}`);
+                }
+                process.exit(1);
+            });
+
+            // Handle graceful shutdown
+            process.on('SIGINT', () => {
+                ColorLog.YW('\n⏹️  Shutting down server...');
+                server.close(() => {
+                    ColorLog.GW('✅ Server stopped gracefully');
+                    process.exit(0);
+                });
+            });
+
+            // Keep the server running
+            process.on('SIGTERM', () => {
+                ColorLog.YW('\n⏹️  Received SIGTERM, shutting down server...');
+                server.close(() => {
+                    ColorLog.GW('✅ Server stopped gracefully');
+                    process.exit(0);
+                });
+            });
+
+        } catch (error) {
+            ColorLog.RW('💥 Failed to start local server:', error.message);
+            process.exit(1);
+        }
     }
 }
 

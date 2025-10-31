@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html dir="rtl" lang="he">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🚀 runCodeV3 Local Server Test</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            direction: rtl;
+            text-align: center;
+            margin: 0;
+            padding: 40px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .container {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 40px;
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            max-width: 600px;
+        }
+        
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+        
+        .status {
+            background: rgba(46, 204, 113, 0.2);
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            border: 2px solid #2ecc71;
+        }
+        
+        .info {
+            background: rgba(52, 152, 219, 0.2);
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+            border-left: 4px solid #3498db;
+            text-align: right;
+        }
+        
+        .features {
+            text-align: right;
+            margin: 20px 0;
+        }
+        
+        .features li {
+            margin: 10px 0;
+            list-style: none;
+            padding: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 5px;
+        }
+        
+        .button {
+            display: inline-block;
+            padding: 12px 25px;
+            background: #e74c3c;
+            color: white;
+            text-decoration: none;
+            border-radius: 25px;
+            margin: 10px;
+            transition: all 0.3s;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+        
+        .button:hover {
+            background: #c0392b;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+        }
+        
+        .timestamp {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: rgba(0, 0, 0, 0.5);
+            padding: 10px;
+            border-radius: 5px;
+            font-size: 0.9em;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🚀 runCodeV3 Local Server</h1>
+        
+        <div class="status">
+            <h2>✅ השרת פועל בהצלחה!</h2>
+            <p>השרת המקומי של runCodeV3 פועל ומוכן לשימוש</p>
+        </div>
+        
+        <div class="info">
+            <h3>📍 פרטי השרת:</h3>
+            <p><strong>כתובת:</strong> http://localhost:8001</p>
+            <p><strong>תיקייה:</strong> D:\sheba-runCode</p>
+            <p><strong>מנוע:</strong> runCodeV3 HTTP Server</p>
+        </div>
+        
+        <h3>🎯 תכונות השרת:</h3>
+        <ul class="features">
+            <li>🌐 שרת HTTP מקומי מובנה</li>
+            <li>📁 הגשת קבצים סטטיים</li>
+            <li>🔒 הגנה מפני directory traversal</li>
+            <li>🎨 תמיכה בעברית ו-RTL</li>
+            <li>📊 תמיכה ב-MIME types שונים</li>
+            <li>⚡ CORS headers אוטומטיים</li>
+            <li>📄 דפי שגיאה מותאמים אישית</li>
+        </ul>
+        
+        <div style="margin: 30px 0;">
+            <a href="/test-hebrew-table.html" class="button">📊 צפה בטבלה עברית</a>
+            <a href="/runCodeV3.js" class="button">📝 קוד המקור</a>
+        </div>
+        
+        <div class="info">
+            <h4>💡 טיפים לשימוש:</h4>
+            <p>• הנח קבצי HTML, CSS, JS בתיקיית השרת</p>
+            <p>• גש לקבצים דרך http://localhost:8001/filename</p>
+            <p>• עצור את השרת עם Ctrl+C</p>
+        </div>
+    </div>
+    
+    <div class="timestamp">
+        <script>
+            document.write('⏰ ' + new Date().toLocaleString('he-IL'));
+        </script>
+    </div>
+</body>
+</html>
