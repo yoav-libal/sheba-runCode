@@ -1,0 +1,23 @@
+{
+  "name": "convert-html2pdf-standalone",
+  "version": "1.0.0",
+  "description": "Truly standalone HTML to PDF converter with embedded Chromium",
+  "main": "convertHTML2PDF-standalone.js",
+  "bin": {
+    "convertHTML2PDF-standalone": "./convertHTML2PDF-standalone.js"
+  },
+  "scripts": {
+    "build": "pkg . --targets node18-win-x64 --out-path ./dist",
+    "build-portable": "pkg convertHTML2PDF-standalone.js --targets node18-win-x64 --output convertHTML2PDF-standalone.exe"
+  },
+  "dependencies": {
+    "puppeteer-core": "^21.5.2"
+  },
+  "devDependencies": {
+    "pkg": "^5.8.1"
+  },
+  "pkg": {
+    "targets": ["node18-win-x64"],
+    "assets": []
+  }
+}
