@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html dir="rtl" lang="he">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>דוח טבלה עברית - Hebrew Table Report</title>
+    <style>
+        body {
+            font-family: 'Arial', 'Segoe UI', sans-serif;
+            direction: rtl;
+            text-align: right;
+            margin: 20px;
+            line-height: 1.6;
+        }
+        
+        h1 {
+            color: #2c3e50;
+            text-align: center;
+            border-bottom: 3px solid #3498db;
+            padding-bottom: 10px;
+        }
+        
+        .info {
+            background-color: #f8f9fa;
+            padding: 15px;
+            border-right: 4px solid #007bff;
+            margin-bottom: 20px;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            direction: rtl;
+        }
+        
+        th {
+            background-color: #3498db;
+            color: white;
+            padding: 12px;
+            text-align: right;
+            font-weight: bold;
+            border: 1px solid #2980b9;
+        }
+        
+        td {
+            padding: 10px;
+            border: 1px solid #bdc3c7;
+            text-align: right;
+        }
+        
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+        
+        tr:hover {
+            background-color: #e8f4fd;
+        }
+        
+        .number {
+            text-align: center;
+            font-weight: bold;
+            color: #e74c3c;
+        }
+        
+        .status-active {
+            color: #27ae60;
+            font-weight: bold;
+        }
+        
+        .status-inactive {
+            color: #e74c3c;
+            font-weight: bold;
+        }
+        
+        .footer {
+            margin-top: 30px;
+            text-align: center;
+            font-size: 0.9em;
+            color: #7f8c8d;
+        }
+    </style>
+</head>
+<body>
+    <h1>📊 דוח עובדים חודשי - דצמבר 2024</h1>
+    
+    <div class="info">
+        <strong>מידע כללי:</strong><br>
+        תאריך הדוח: 31 בדצמבר 2024<br>
+        מספר עובדים כולל: 100<br>
+        מחלקות: פיתוח, שיווק, משאבי אנוש, כספים<br>
+        <strong>הערה:</strong> טבלה זו מכילה 100 שורות לבדיקת חזרה של כותרות בעמודים נוספים
+    </div>
+
+    <table>
+        <thead>
+            <tr>
+                <th>מספר עובד</th>
+                <th>שם פרטי</th>
+                <th>שם משפחה</th>
+                <th>מחלקה</th>
+                <th>תפקיד</th>
+                <th>שכר חודשי (₪)</th>
+                <th>תאריך תחילת עבודה</th>
+                <th>סטטוס</th>
+                <th>הערות</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr><td class="number">001</td><td>אברהם</td><td>כהן</td><td>פיתוח</td><td>מפתח בכיר</td><td>25,000</td><td>01/01/2020</td><td class="status-active">פעיל</td><td>מומחה ב-JavaScript</td></tr>
+            <tr><td class="number">002</td><td>שרה</td><td>לוי</td><td>שיווק</td><td>מנהלת שיווק</td><td>22,000</td><td>15/03/2019</td><td class="status-active">פעיל</td><td>ניהול קמפיינים דיגיטליים</td></tr>
+            <tr><td class="number">003</td><td>דוד</td><td>ישראל</td><td>משאבי אנוש</td><td>מגייס</td><td>18,000</td><td>10/06/2021</td><td class="status-active">פעיל</td><td>התמחות בהיי-טק</td></tr>
+            <tr><td class="number">004</td><td>רחל</td><td>דוד</td><td>כספים</td><td>רואת חשבון</td><td>24,000</td><td>20/09/2018</td><td class="status-active">פעיל</td><td>CPA מוסמכת</td></tr>
+            <tr><td class="number">005</td><td>משה</td><td>אברהם</td><td>פיתוח</td><td>מפתח צעיר</td><td>16,000</td><td>05/01/2023</td><td class="status-active">פעיל</td><td>בוגר טכניון</td></tr>
+            <tr><td class="number">006</td><td>מרים</td><td>יעקב</td><td>שיווק</td><td>מעצבת גרפית</td><td>19,000</td><td>12/11/2020</td><td class="status-active">פעיל</td><td>התמחות ב-UI/UX</td></tr>
+            <tr><td class="number">007</td><td>יוסף</td><td>שמואל</td><td>פיתוח</td><td>אדריכל מערכות</td><td>32,000</td><td>03/07/2017</td><td class="status-active">פעיל</td><td>15 שנות ניסיון</td></tr>
+            <tr><td class="number">008</td><td>אסתר</td><td>מלך</td><td>משאבי אנוש</td><td>מנהלת מש"א</td><td>28,000</td><td>18/02/2016</td><td class="status-active">פעיל</td><td>תואר שני בפסיכולוגיה</td></tr>
+            <tr><td class="number">009</td><td>אהרון</td><td>גולד</td><td>כספים</td><td>מנתח כספי</td><td>21,000</td><td>25/04/2022</td><td class="status-active">פעיל</td><td>MBA בכלכלה</td></tr>
+            <tr><td class="number">010</td><td>דינה</td><td>רוזן</td><td>שיווק</td><td>מנהלת תוכן</td><td>20,000</td><td>08/12/2021</td><td class="status-active">פעיל</td><td>כותבת תוכן מנוסה</td></tr>
+            <tr><td class="number">011</td><td>בנימין</td><td>כהן</td><td>פיתוח</td><td>מפתח</td><td>19,500</td><td>14/05/2022</td><td class="status-active">פעיל</td><td>מומחה ב-Python</td></tr>
+            <tr><td class="number">012</td><td>חנה</td><td>לוי</td><td>כספים</td><td>רואת חשבון צעירה</td><td>17,000</td><td>22/08/2023</td><td class="status-active">פעיל</td><td>בתהליך הסמכה</td></tr>
+            <tr><td class="number">013</td><td>אליעזר</td><td>ברוך</td><td>פיתוח</td><td>מהנדס QA</td><td>22,500</td><td>30/10/2020</td><td class="status-active">פעיל</td><td>אוטומציה ובדיקות</td></tr>
+            <tr><td class="number">014</td><td>לאה</td><td>שמעון</td><td>שיווק</td><td>מנהלת מדיה חברתית</td><td>18,500</td><td>11/03/2023</td><td class="status-active">פעיל</td><td>מומחית פייסבוק ואינסטגרם</td></tr>
+            <tr><td class="number">015</td><td>יעקב</td><td>אשכנזי</td><td>משאבי אנוש</td><td>יועץ ארגוני</td><td>26,000</td><td>17/09/2019</td><td class="status-active">פעיל</td><td>יועץ פיתוח ארגוני</td></tr>
+            <tr><td class="number">016</td><td>רבקה</td><td>פרידמן</td><td>פיתוח</td><td>מפתחת פרונט-אנד</td><td>21,500</td><td>06/01/2022</td><td class="status-active">פעיל</td><td>React ו-Angular</td></tr>
+            <tr><td class="number">017</td><td>שמעון</td><td>גרין</td><td>כספים</td><td>מנהל כספים</td><td>35,000</td><td>28/06/2015</td><td class="status-active">פעיל</td><td>CFA מוסמך</td></tr>
+            <tr><td class="number">018</td><td>יהודית</td><td>כהן</td><td>שיווק</td><td>מנהלת קמפיינים</td><td>23,000</td><td>13/04/2021</td><td class="status-active">פעיל</td><td>גוגל אדס מוסמכת</td></tr>
+            <tr><td class="number">019</td><td>גד</td><td>בן דוד</td><td>פיתוח</td><td>מפתח בקאנד</td><td>24,500</td><td>09/11/2020</td><td class="status-active">פעיל</td><td>Node.js ו-MongoDB</td></tr>
+            <tr><td class="number">020</td><td>עדינה</td><td>ישראלי</td><td>משאבי אנוש</td><td>רכזת הדרכות</td><td>19,500</td><td>21/07/2022</td><td class="status-active">פעיל</td><td>מדריכה מוסמכת</td></tr>
+            <tr><td class="number">021</td><td>אלי</td><td>מלכה</td><td>פיתוח</td><td>מפתח אפליקציות</td><td>23,500</td><td>16/02/2021</td><td class="status-active">פעיל</td><td>iOS ו-Android</td></tr>
+            <tr><td class="number">022</td><td>תמר</td><td>צדוק</td><td>שיווק</td><td>מנתחת שיווק</td><td>20,500</td><td>04/12/2022</td><td class="status-active">פעיל</td><td>Google Analytics</td></tr>
+            <tr><td class="number">023</td><td>דן</td><td>אביב</td><td>כספים</td><td>בקר כספי</td><td>18,500</td><td>27/08/2023</td><td class="status-active">פעיל</td><td>בקרת תקציבים</td></tr>
+            <tr><td class="number">024</td><td>נעמי</td><td>שלום</td><td>פיתוח</td><td>מהנדסת DevOps</td><td>28,000</td><td>19/05/2020</td><td class="status-active">פעיל</td><td>AWS ו-Docker</td></tr>
+            <tr><td class="number">025</td><td>אורי</td><td>בן חיים</td><td>משאבי אנוש</td><td>איש כוח אדם</td><td>17,500</td><td>23/01/2024</td><td class="status-active">פעיל</td><td>מתחיל עבודה</td></tr>
+            <tr><td class="number">026</td><td>שושנה</td><td>רוטשילד</td><td>שיווק</td><td>מנהלת אירועים</td><td>22,000</td><td>10/09/2021</td><td class="status-active">פעיל</td><td>ארגון כנסים</td></tr>
+            <tr><td class="number">027</td><td>חיים</td><td>נתן</td><td>פיתוח</td><td>מפתח משחקים</td><td>26,500</td><td>07/06/2019</td><td class="status-active">פעיל</td><td>Unity ו-Unreal</td></tr>
+            <tr><td class="number">028</td><td>פנינה</td><td>זהב</td><td>כספים</td><td>מנהלת חשבונות</td><td>21,000</td><td>15/03/2022</td><td class="status-active">פעיל</td><td>QuickBooks מומחית</td></tr>
+            <tr><td class="number">029</td><td>יונתן</td><td>שמש</td><td>פיתוח</td><td>מומחה אבטחת מידע</td><td>31,000</td><td>02/11/2018</td><td class="status-active">פעיל</td><td>CISSP מוסמך</td></tr>
+            <tr><td class="number">030</td><td>מלכה</td><td>ארז</td><td>שיווק</td><td>יועצת שיווק</td><td>24,000</td><td>26/04/2020</td><td class="status-active">פעיל</td><td>שיווק B2B</td></tr>
+            <tr><td class="number">031</td><td>שלמה</td><td>חכם</td><td>משאבי אנוש</td><td>מומחה גיוס</td><td>25,000</td><td>18/07/2019</td><td class="status-inactive">חופשה</td><td>חופשת לידה</td></tr>
+            <tr><td class="number">032</td><td>גילה</td><td>נור</td><td>פיתוח</td><td>מפתחת</td><td>20,000</td><td>09/12/2022</td><td class="status-active">פעיל</td><td>C# ו-.NET</td></tr>
+            <tr><td class="number">033</td><td>עמוס</td><td>שחור</td><td>כספים</td><td>יועץ כלכלי</td><td>29,000</td><td>14/08/2017</td><td class="status-active">פעיל</td><td>תחזיות כלכליות</td></tr>
+            <tr><td class="number">034</td><td>זיוה</td><td>לבן</td><td>שיווק</td><td>מנהלת מותג</td><td>26,000</td><td>31/01/2021</td><td class="status-active">פעיל</td><td>ניהול מותגים</td></tr>
+            <tr><td class="number">035</td><td>איתן</td><td>בר</td><td>פיתוח</td><td>מהנדס נתונים</td><td>27,500</td><td>22/10/2020</td><td class="status-active">פעיל</td><td>Big Data ו-AI</td></tr>
+            <tr><td class="number">036</td><td>שירה</td><td>דגן</td><td>משאבי אנוש</td><td>מנהלת רווחה</td><td>23,500</td><td>05/05/2021</td><td class="status-active">פעיל</td><td>רווחת עובדים</td></tr>
+            <tr><td class="number">037</td><td>רועי</td><td>אור</td><td>פיתוח</td><td>מפתח משוטף</td><td>19,000</td><td>28/09/2023</td><td class="status-active">פעיל</td><td>PHP ו-Laravel</td></tr>
+            <tr><td class="number">038</td><td>נעה</td><td>פז</td><td>שיווק</td><td>מעצבת UX</td><td>24,500</td><td>11/06/2021</td><td class="status-active">פעיל</td><td>חוויית משתמש</td></tr>
+            <tr><td class="number">039</td><td>גלעד</td><td>כסף</td><td>כספים</td><td>מנהל השקעות</td><td>33,000</td><td>17/02/2016</td><td class="status-active">פעיל</td><td>ניהול תיקי השקעות</td></tr>
+            <tr><td class="number">040</td><td>ליאת</td><td>ירוק</td><td>פיתוח</td><td>מפתחת אפליקציות</td><td>22,000</td><td>08/11/2022</td><td class="status-active">פעיל</td><td>React Native</td></tr>
+            <tr><td class="number">041</td><td>אמיר</td><td>חום</td><td>משאבי אנוש</td><td>מומחה שכר</td><td>21,500</td><td>03/04/2022</td><td class="status-active">פעיל</td><td>מערכות שכר</td></tr>
+            <tr><td class="number">042</td><td>יעל</td><td>אדום</td><td>שיווק</td><td>מנהלת יחסי ציבור</td><td>25,500</td><td>20/12/2020</td><td class="status-active">פעיל</td><td>יח"צ ותקשורת</td></tr>
+            <tr><td class="number">043</td><td>אסף</td><td>כחול</td><td>פיתוח</td><td>מהנדס רשתות</td><td>25,000</td><td>12/07/2019</td><td class="status-active">פעיל</td><td>Cisco מוסמך</td></tr>
+            <tr><td class="number">044</td><td>הדס</td><td>ורוד</td><td>כספים</td><td>רכזת הנהלת חשבונות</td><td>19,500</td><td>25/03/2023</td><td class="status-active">פעיל</td><td>הנהלת חשבונות</td></tr>
+            <tr><td class="number">045</td><td>נתן</td><td>סגול</td><td>פיתוח</td><td>מפתח BI</td><td>26,000</td><td>16/08/2021</td><td class="status-active">פעיל</td><td>Power BI ו-Tableau</td></tr>
+            <tr><td class="number">046</td><td>מיכל</td><td>צהוב</td><td>שיווק</td><td>מנהלת שותפויות</td><td>23,000</td><td>29/01/2022</td><td class="status-active">פעיל</td><td>שותפויות עסקיות</td></tr>
+            <tr><td class="number">047</td><td>דורון</td><td>תכלת</td><td>משאבי אנוש</td><td>מנהל התפתחות</td><td>27,000</td><td>06/10/2020</td><td class="status-active">פעיל</td><td>פיתוח מקצועי</td></tr>
+            <tr><td class="number">048</td><td>רונית</td><td>בז</td><td>פיתוח</td><td>מפתחת בלוקצ'יין</td><td>29,500</td><td>21/05/2021</td><td class="status-active">פעיל</td><td>Ethereum ו-Solidity</td></tr>
+            <tr><td class="number">049</td><td>עודד</td><td>חום בהיר</td><td>כספים</td><td>מנתח סיכונים</td><td>24,000</td><td>13/09/2022</td><td class="status-active">פעיל</td><td>ניתוח סיכונים פיננסיים</td></tr>
+            <tr><td class="number">050</td><td>ענת</td><td>אפור</td><td>שיווק</td><td>מנהלת מכירות</td><td>28,500</td><td>07/03/2019</td><td class="status-active">פעיל</td><td>מכירות B2B</td></tr>
+            <tr><td class="number">051</td><td>יגאל</td><td>זית</td><td>פיתוח</td><td>מהנדס מערכות</td><td>30,000</td><td>18/11/2018</td><td class="status-active">פעיל</td><td>Linux ו-מערכות פתוחות</td></tr>
+            <tr><td class="number">052</td><td>טלי</td><td>נחושת</td><td>משאבי אנוש</td><td>רכזת גיוס</td><td>18,000</td><td>24/06/2023</td><td class="status-active">פעיל</td><td>גיוס טכנולוגי</td></tr>
+            <tr><td class="number">053</td><td>אלון</td><td>כסף בהיר</td><td>כספים</td><td>מנהל תקציבים</td><td>26,500</td><td>15/04/2020</td><td class="status-active">פעיל</td><td>תכנון תקציבי</td></tr>
+            <tr><td class="number">054</td><td>מעיין</td><td>זהב בהיר</td><td>שיווק</td><td>מומחית SEO</td><td>21,000</td><td>09/08/2022</td><td class="status-active">פעיל</td><td>קידום אתרים</td></tr>
+            <tr><td class="number">055</td><td>בועז</td><td>ברונזה</td><td>פיתוח</td><td>מפתח משחקים מובייל</td><td>25,500</td><td>30/12/2021</td><td class="status-active">פעיל</td><td>Unity לנייד</td></tr>
+            <tr><td class="number">056</td><td>הילה</td><td>פלטינה</td><td>משאבי אנוש</td><td>מנהלת תוכניות</td><td>29,000</td><td>14/02/2019</td><td class="status-active">פעיל</td><td>ניהול תוכניות הכשרה</td></tr>
+            <tr><td class="number">057</td><td>רם</td><td>דיינמונד</td><td>פיתוח</td><td>חוקר אלגוריתמים</td><td>35,500</td><td>22/09/2017</td><td class="status-active">פעיל</td><td>Ph.D במדעי המחשב</td></tr>
+            <tr><td class="number">058</td><td>שלומית</td><td>פנינה</td><td>שיווק</td><td>מנהלת קהילות</td><td>20,000</td><td>11/07/2023</td><td class="status-active">פעיל</td><td>קהילות מקוונות</td></tr>
+            <tr><td class="number">059</td><td>אדיר</td><td>אמרלד</td><td>כספים</td><td>יועץ מיסוי</td><td>27,500</td><td>05/01/2021</td><td class="status-active">פעיל</td><td>מיסוי חברות</td></tr>
+            <tr><td class="number">060</td><td>אורלי</td><td>רובי</td><td>פיתוח</td><td>מפתחת VR</td><td>28,000</td><td>19/10/2020</td><td class="status-active">פעיל</td><td>מציאות מדומה</td></tr>
+            <tr><td class="number">061</td><td>עמית</td><td>ספיר</td><td>משאבי אנוש</td><td>מנחה ארגוני</td><td>25,500</td><td>28/05/2021</td><td class="status-inactive">חופשה</td><td>השתלמות בחו"ל</td></tr>
+            <tr><td class="number">062</td><td>ליאור</td><td>טופז</td><td>שיווק</td><td>מנהל שיווק דיגיטלי</td><td>26,000</td><td>03/12/2020</td><td class="status-active">פעיל</td><td>Facebook ו-Google Ads</td></tr>
+            <tr><td class="number">063</td><td>קרן</td><td>אקווה מרין</td><td>פיתוח</td><td>מהנדסת למידת מכונה</td><td>32,000</td><td>16/06/2019</td><td class="status-active">פעיל</td><td>TensorFlow ו-PyTorch</td></tr>
+            <tr><td class="number">064</td><td>יובל</td><td>טורקיז</td><td>כספים</td><td>מנהל דיווחים</td><td>23,500</td><td>21/11/2022</td><td class="status-active">פעיל</td><td>דיווחים רגולטוריים</td></tr>
+            <tr><td class="number">065</td><td>שרון</td><td>קורל</td><td>משאבי אנוש</td><td>מנהלת אירועי חברה</td><td>22,000</td><td>08/03/2023</td><td class="status-active">פעיל</td><td>אירועי צוות</td></tr>
+            <tr><td class="number">066</td><td>אריאל</td><td>ג'ייד</td><td>פיתוח</td><td>מפתח IoT</td><td>26,500</td><td>14/08/2021</td><td class="status-active">פעיל</td><td>אינטרנט הדברים</td></tr>
+            <tr><td class="number">067</td><td>דליה</td><td>אוניקס</td><td>שיווק</td><td>מומחית וידאו מרקטינג</td><td>22,500</td><td>29/04/2022</td><td class="status-active">פעיל</td><td>יוטיוב ו-TikTok</td></tr>
+            <tr><td class="number">068</td><td>נוי</td><td>אובסידיאן</td><td>כספים</td><td>מנהלת חוזים</td><td>24,500</td><td>12/09/2021</td><td class="status-active">פעיל</td><td>ניהול חוזים</td></tr>
+            <tr><td class="number">069</td><td>עמיר</td><td>מלכיט</td><td>פיתוח</td><td>מפתח AR</td><td>27,000</td><td>06/01/2022</td><td class="status-active">פעיל</td><td>מציאות רבודה</td></tr>
+            <tr><td class="number">070</td><td>נירית</td><td>לזורד</td><td>משאבי אנוש</td><td>מומחית תגמולים</td><td>26,500</td><td>23/07/2020</td><td class="status-active">פעיל</td><td>מבנה תגמולים</td></tr>
+            <tr><td class="number">071</td><td>גיא</td><td>אגט</td><td>שיווק</td><td>מנהל אילוצים</td><td>24,000</td><td>17/12/2022</td><td class="status-active">פעיל</td><td>ניהול משברים</td></tr>
+            <tr><td class="number">072</td><td>ברק</td><td>יספה</td><td>פיתוח</td><td>מומחה קלאוד</td><td>30,500</td><td>10/05/2020</td><td class="status-active">פעיל</td><td>AWS Solutions Architect</td></tr>
+            <tr><td class="number">073</td><td>עינת</td><td>קוורץ</td><td>כספים</td><td>מנתחת נתונים כספיים</td><td>22,000</td><td>26/10/2023</td><td class="status-active">פעיל</td><td>SQL ו-Python</td></tr>
+            <tr><td class="number">074</td><td>רוני</td><td>פלואורייט</td><td>משאבי אנוש</td><td>יועץ קריירה</td><td>21,000</td><td>04/06/2022</td><td class="status-active">פעיל</td><td>ייעוץ מקצועי</td></tr>
+            <tr><td class="number">075</td><td>סיגל</td><td>המטייט</td><td>שיווק</td><td>מנהלת תוכן וידאו</td><td>23,500</td><td>18/11/2021</td><td class="status-active">פעיל</td><td>עריכת וידאו</td></tr>
+            <tr><td class="number">076</td><td>תומר</td><td>פיריט</td><td>פיתוח</td><td>מהנדס אמינות</td><td>29,000</td><td>01/08/2020</td><td class="status-active">פעיל</td><td>SRE ו-DevOps</td></tr>
+            <tr><td class="number">077</td><td>מאיה</td><td>מגנטייט</td><td>כספים</td><td>מנהלת משאבים</td><td>25,000</td><td>15/02/2022</td><td class="status-active">פעיל</td><td>ניהול משאבים</td></tr>
+            <tr><td class="number">078</td><td>איתי</td><td>גלנה</td><td>משאבי אנוש</td><td>מנהל תוכנית חונכות</td><td>24,500</td><td>09/09/2021</td><td class="status-active">פעיל</td><td>חונכות עובדים חדשים</td></tr>
+            <tr><td class="number">079</td><td>לינוי</td><td>קלציט</td><td>שיווק</td><td>מומחית אוטומציה</td><td>25,500</td><td>22/03/2023</td><td class="status-active">פעיל</td><td>Marketing Automation</td></tr>
+            <tr><td class="number">080</td><td>יניב</td><td>גרפיט</td><td>פיתוח</td><td>מפתח בלוקצ'יין</td><td>31,000</td><td>07/12/2019</td><td class="status-active">פעיל</td><td>Smart Contracts</td></tr>
+            <tr><td class="number">081</td><td>רעות</td><td>שיש</td><td>כספים</td><td>מנהלת תזרים מזומנים</td><td>26,000</td><td>13/07/2021</td><td class="status-active">פעיל</td><td>ניהול תזרים</td></tr>
+            <tr><td class="number">082</td><td>עידו</td><td>גרניט</td><td>משאבי אנוש</td><td>מנהל בטיחות</td><td>23,000</td><td>25/01/2023</td><td class="status-active">פעיל</td><td>בטיחות תעסוקתית</td></tr>
+            <tr><td class="number">083</td><td>חן</td><td>בזלת</td><td>שיווק</td><td>מנהלת אפיליאייט</td><td>21,500</td><td>11/08/2022</td><td class="status-active">פעיל</td><td>שיווק שותפים</td></tr>
+            <tr><td class="number">084</td><td>רועי</td><td>אנדזיט</td><td>פיתוח</td><td>מומחה אבטחה</td><td>32,500</td><td>28/04/2018</td><td class="status-active">פעיל</td><td>Penetration Testing</td></tr>
+            <tr><td class="number">085</td><td>שני</td><td>דיוריט</td><td>כספים</td><td>מנתחת השקעות</td><td>24,000</td><td>16/10/2022</td><td class="status-active">פעיל</td><td>ניתוח שוק הון</td></tr>
+            <tr><td class="number">086</td><td>אלעד</td><td>גבכיש</td><td>משאבי אנוש</td><td>מנהל תכניות רווחה</td><td>25,500</td><td>03/05/2021</td><td class="status-active">פעיל</td><td>הטבות עובדים</td></tr>
+            <tr><td class="number">087</td><td>מירב</td><td>פגמטייט</td><td>שיווק</td><td>מנהלת לקוחות VIP</td><td>27,000</td><td>20/11/2020</td><td class="status-active">פעיל</td><td>שירות לקוחות מובחרים</td></tr>
+            <tr><td class="number">088</td><td>נדב</td><td>שיסט</td><td>פיתוח</td><td>מהנדס אינטגרציה</td><td>28,500</td><td>06/07/2021</td><td class="status-active">פעיל</td><td>API ו-Microservices</td></tr>
+            <tr><td class="number">089</td><td>גלית</td><td>נפלין</td><td>כספים</td><td>מנהלת סיכונים</td><td>30,000</td><td>12/02/2020</td><td class="status-active">פעיל</td><td>ניהול סיכונים פיננסיים</td></tr>
+            <tr><td class="number">090</td><td>אור</td><td>פלדספר</td><td>משאבי אנוש</td><td>מנהל פיתוח מנהיגות</td><td>31,500</td><td>29/08/2019</td><td class="status-active">פעיל</td><td>תוכניות מנהיגות</td></tr>
+            <tr><td class="number">091</td><td>יסמין</td><td>קוורצייט</td><td>שיווק</td><td>מנהלת חדשנות שיווקית</td><td>28,000</td><td>14/12/2021</td><td class="status-active">פעיל</td><td>חדשנות דיגיטלית</td></tr>
+            <tr><td class="number">092</td><td>אומר</td><td>סרפנטין</td><td>פיתוח</td><td>ארכיטקט תוכנה</td><td>34,000</td><td>21/06/2018</td><td class="status-active">פעיל</td><td>עיצוב מערכות מורכבות</td></tr>
+            <tr><td class="number">093</td><td>רוית</td><td>טלק</td><td>כספים</td><td>מנהלת תכנון פיננסי</td><td>29,500</td><td>05/03/2020</td><td class="status-active">פעיל</td><td>תכנון אסטרטגי</td></tr>
+            <tr><td class="number">094</td><td>דניאל</td><td>גיפס</td><td>משאבי אנוש</td><td>מנהל תוכניות גיוון</td><td>26,000</td><td>18/09/2022</td><td class="status-active">פעיל</td><td>גיוון והכלה</td></tr>
+            <tr><td class="number">095</td><td>שירן</td><td>אנהידרייט</td><td>שיווק</td><td>מנהלת חוויית לקוח</td><td>27,500</td><td>10/04/2021</td><td class="status-active">פעיל</td><td>CX ו-UX</td></tr>
+            <tr><td class="number">096</td><td>גל</td><td>דולומיט</td><td>פיתוח</td><td>מפתח רובוטיקה</td><td>30,500</td><td>27/01/2022</td><td class="status-active">פעיל</td><td>ROS ו-Computer Vision</td></tr>
+            <tr><td class="number">097</td><td>מרב</td><td>ליים סטון</td><td>כספים</td><td>מנהלת אשראי</td><td>25,500</td><td>04/11/2021</td><td class="status-active">פעיל</td><td>ניהול אשראי</td></tr>
+            <tr><td class="number">098</td><td>יואב</td><td>סנדסטון</td><td>משאבי אנוש</td><td>מנהל תוכניות התפתחות</td><td>28,500</td><td>19/05/2020</td><td class="status-active">פעיל</td><td>קריירה ופיתוח</td></tr>
+            <tr><td class="number">099</td><td>אילנה</td><td>קונגלומרט</td><td>שיווק</td><td>מנהלת שיווק גלובלי</td><td>32,000</td><td>08/08/2019</td><td class="status-active">פעיל</td><td>שווקים בינלאומיים</td></tr>
+            <tr><td class="number">100</td><td>משיח</td><td>ברצ'יה</td><td>פיתוח</td><td>CTO</td><td>45,000</td><td>01/01/2015</td><td class="status-active">פעיל</td><td>מנהל טכנולוגיות ראשי</td></tr>
+        </tbody>
+    </table>
+
+    <div class="footer">
+        <strong>סיכום:</strong> 100 עובדים | 98 פעילים | 2 בחופשה<br>
+        סה"כ שכר חודשי: ₪2,545,000<br>
+        <em>דוח נוצר באמצעות convertHTML2PDF עם תמיכה בעברית ו-RTL</em>
+    </div>
+</body>
+</html>

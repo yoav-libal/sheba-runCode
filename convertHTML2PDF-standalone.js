@@ -27,15 +27,18 @@ async function main() {
             process.exit(0);
         }
 
-        // Parse arguments for browser path
+        // Parse arguments for browser path and table enhancement
         let browserPath = null;
         let inputFile = null;
         let outputFile = null;
+        let enhanceTables = false;
         
         for (let i = 0; i < args.length; i++) {
             if (args[i] === '--bpath' && i + 1 < args.length) {
                 browserPath = args[i + 1];
                 i++; // Skip next argument
+            } else if (args[i] === '--table') {
+                enhanceTables = true;
             } else if (!inputFile) {
                 inputFile = args[i];
             } else if (!outputFile) {
@@ -44,11 +47,11 @@ async function main() {
         }
 
         if (!inputFile && !outputFile) {
-            throw new Error('❌ Missing both input and output files.\n\nUsage: convertHTML2PDF.exe [--bpath <browser-path>] <input.html> <output.pdf>');
+            throw new Error('❌ Missing both input and output files.\n\nUsage: convertHTML2PDF.exe [--bpath <browser-path>] [--table] <input.html> <output.pdf>');
         } else if (!inputFile) {
-            throw new Error('❌ Missing input HTML file.\n\nUsage: convertHTML2PDF.exe [--bpath <browser-path>] <input.html> <output.pdf>');
+            throw new Error('❌ Missing input HTML file.\n\nUsage: convertHTML2PDF.exe [--bpath <browser-path>] [--table] <input.html> <output.pdf>');
         } else if (!outputFile) {
-            throw new Error('❌ Missing output PDF file.\n\nUsage: convertHTML2PDF.exe [--bpath <browser-path>] <input.html> <output.pdf>');
+            throw new Error('❌ Missing output PDF file.\n\nUsage: convertHTML2PDF.exe [--bpath <browser-path>] [--table] <input.html> <output.pdf>');
         }
 
         // Validate input file
@@ -97,6 +100,41 @@ async function main() {
             timeout: 30000
         });
 
+        // Conditionally inject CSS for better table handling (only if --table flag used)
+        if (enhanceTables) {
+            await page.addStyleTag({
+                content: `
+                    /* Ensure table headers repeat on each page */
+                    table thead {
+                        display: table-header-group;
+                    }
+                    
+                    /* Prevent page breaks inside table rows */
+                    table tr {
+                        page-break-inside: avoid;
+                    }
+                    
+                    /* Better table styling for PDF */
+                    table {
+                        border-collapse: collapse;
+                        width: 100%;
+                    }
+                    
+                    /* Print-specific styles */
+                    @media print {
+                        table thead {
+                            display: table-header-group;
+                        }
+                        
+                        tr {
+                            page-break-inside: avoid;
+                        }
+                    }
+                `
+            });
+            console.log('🎨 Enhanced table CSS injected for header repetition');
+        }
+
         console.log('📄 HTML content loaded in browser');
 
         // Generate PDF
@@ -105,6 +143,8 @@ async function main() {
         const pdfBuffer = await page.pdf({
             format: 'A4',
             printBackground: true,
+            preferCSSPageSize: true,  // Respect CSS @page rules
+            displayHeaderFooter: false,
             margin: {
                 top: '20px',
                 right: '20px',
@@ -251,13 +291,16 @@ Standalone HTML to PDF Converter with Smart Chrome Detection
 Usage: 
   convertHTML2PDF.exe <input.html> <output.pdf>
   convertHTML2PDF.exe --bpath <browser-path> <input.html> <output.pdf>
+  convertHTML2PDF.exe --table <input.html> <output.pdf>
 
 Examples:
   convertHTML2PDF.exe document.html document.pdf
   convertHTML2PDF.exe --bpath "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe" doc.html doc.pdf
+  convertHTML2PDF.exe --table table-report.html report.pdf
 
 Options:
   --bpath <path>          Specify Chrome/Edge executable path (will be cached for future use)
+  --table                 Enable enhanced table support with repeating headers across pages
   --help, /?              Show this help message
 
 🔧 Smart Chrome Detection:
