@@ -28,6 +28,16 @@ class ModuleLoader {
             { name: 'xlsx-calc', alias: 'XLSX_CALC' },
             { name: 'pdf2json', alias: 'pdf2json' },
             { name: 'nodemailer', alias: 'nodemailer' },
+            { name: 'lodash', alias: 'lodash' },
+            { name: 'path', alias: 'path', isBuiltIn: true },
+            { name: 'os', alias: 'os', isBuiltIn: true },
+            { name: 'crypto', alias: 'crypto', isBuiltIn: true },
+            { name: 'util', alias: 'util', isBuiltIn: true },
+            { name: 'url', alias: 'url', isBuiltIn: true },
+            { name: 'querystring', alias: 'querystring', isBuiltIn: true },
+            { name: 'buffer', alias: 'buffer', isBuiltIn: true },
+            { name: 'stream', alias: 'stream', isBuiltIn: true },
+            { name: 'events', alias: 'events', isBuiltIn: true },
             { name: 'child_process', alias: 'childProcess', isBuiltIn: true }
         ];
 
@@ -123,6 +133,15 @@ class ModuleLoader {
         // Add email aliases
         this.modules.emailSender = this.modules.nodemailer;
         this.modules.mailer = this.modules.nodemailer;
+
+        // Add lodash aliases
+        this.modules._ = this.modules.lodash;
+        this.modules.utils = this.modules.lodash;
+
+        // Add built-in module aliases
+        this.modules.Buffer = this.modules.buffer?.Buffer || Buffer;
+        this.modules.EventEmitter = this.modules.events?.EventEmitter;
+        this.modules.promisify = this.modules.util?.promisify;
 
         // Add ColorLog
         this.modules.ColorLog = ColorLog;

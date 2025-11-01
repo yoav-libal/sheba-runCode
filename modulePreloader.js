@@ -11,6 +11,16 @@ const xlsxCalc = require('xlsx-calc');
 const pdf2json = require('pdf2json');
 const nodemailer = require('nodemailer');
 const childProcess = require('child_process');
+const lodash = require('lodash');
+const path = require('path');
+const os = require('os');
+const crypto = require('crypto');
+const util = require('util');
+const url = require('url');
+const querystring = require('querystring');
+const buffer = require('buffer');
+const stream = require('stream');
+const events = require('events');
 
 // Export all modules for easy access
 module.exports = {
@@ -22,5 +32,15 @@ module.exports = {
     xlsxCalc,
     pdf2json,
     nodemailer,
-    childProcess
+    childProcess,
+    lodash,
+    path,
+    os,
+    crypto,
+    util,
+    url,
+    querystring,
+    buffer,
+    stream,
+    events
 };

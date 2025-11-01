@@ -24,13 +24,21 @@ The size increase was **NOT** due to general Node.js ecosystem bloat as initiall
 mssql@10.0.0 → tedious@16.7.1 → @azure/identity → Full Azure SDK (19MB+)
 ```
 
-**Package Analysis:**
+**Package Analysis (mssql@10.0.0 - problematic version):**
 - **@azure packages**: 19.12 MB (Azure authentication ecosystem)
-- **@js-joda**: 7.36 MB (Java-like date library pulled by Azure)
+- **@js-joda**: 7.36 MB (Java-like date library pulled by @azure/identity)
 - **pdf2json**: 7.8 MB (PDF parsing functionality)
 - **xlsx**: 7.15 MB (Excel file processing)
 - **codepage**: 5.41 MB (Character encoding support)
 - **Base Node.js runtime**: ~36 MB
+
+**Package Analysis (mssql@6.4.1 - optimized version):**
+- **@azure packages**: 2.94 MB (minimal Azure authentication - @azure/ms-rest-nodeauth chain)
+- **pdf2json**: 7.8 MB (PDF parsing functionality)
+- **xlsx**: 7.15 MB (Excel file processing)
+- **codepage**: 5.41 MB (Character encoding support)
+- **Base Node.js runtime**: ~36 MB
+- **@js-joda**: ❌ Not present (eliminated with newer Azure SDK)
 
 ## Solution Implementation
 
@@ -48,6 +56,7 @@ mssql@10.0.0 → tedious@16.7.1 → @azure/identity → Full Azure SDK (19MB+)
 {
   "dependencies": {
     "fs-extra": "^11.3.2",
+    "lodash": "^4.17.21",
     "moment": "^2.30.1", 
     "mssql": "6.4.1",           // ← Key optimization
     "nodemailer": "^6.10.1",
@@ -71,12 +80,14 @@ pkg runCodeV3.js --targets node18-win-x64 --output runCodeV3.exe
 |---------|------|-------------|
 | Original (problematic) | 110.03 MB | mssql@10.0.0 with full Azure SDK |
 | Modules only (optimized) | 74.22 MB | mssql@6.4.1, no embedded libraries |
-| **Final optimized** | **79.39 MB** | mssql@6.4.1 + embedded libraries |
+| **Final optimized** | **76.75 MB** | mssql@6.4.1 + embedded libraries + cleanup |
 
-**Size Savings: 30.64 MB (27.8% reduction)**
+**Size Savings: 33.28 MB (30.2% reduction)**
 
 ### Functionality Maintained
-✅ **Core Modules (9 total):**
+✅ **Core Modules (19 total):**
+
+**NPM Dependencies (9 modules):**
 - mssql (SQL Server connectivity)
 - moment (Date/time manipulation)
 - yargs (CLI argument parsing)
@@ -85,6 +96,18 @@ pkg runCodeV3.js --targets node18-win-x64 --output runCodeV3.exe
 - xlsx-calc (Excel calculations)
 - pdf2json (PDF parsing)
 - nodemailer (Email functionality)
+- lodash (Utility library with aliases: _, utils)
+
+**Built-in Node.js Modules (10 modules):**
+- path (File path operations)
+- os (Operating system info)
+- crypto (Cryptographic functions)
+- util (Utility functions with promisify alias)
+- url (URL parsing)
+- querystring (Query string parsing)
+- buffer (Binary data handling with Buffer alias)
+- stream (Stream operations)
+- events (Event emitter with EventEmitter alias)
 - child_process (Process spawning)
 
 ✅ **Embedded Libraries:**
@@ -108,6 +131,8 @@ pkg runCodeV3.js --targets node18-win-x64 --output runCodeV3.exe
 ### 2. Dependency Analysis Results
 - **Total node_modules reduced:** From 334 packages to 181 packages
 - **Removed packages:** 153 packages (mostly Azure ecosystem)
+- **Azure footprint reduced:** From 19.12MB to 2.94MB (83% reduction)
+- **@js-joda eliminated:** 7.36MB Java-like date library no longer needed
 - **Key insight:** Basic libraries (moment, xlsx, nodemailer) have NOT grown significantly
 
 ### 3. Base Node.js Runtime Size
@@ -206,11 +231,11 @@ npm install -g pkg@5.8.1
 
 The investigation revealed that the 27.8% size increase was entirely attributable to Microsoft's integration of Azure services into basic SQL Server connectivity, not general Node.js ecosystem bloat. By using `mssql@6.4.1` instead of `mssql@10.0.0`, we achieved significant size reduction while maintaining all required functionality and even adding embedded library support.
 
-**Final Result:** 79.39 MB executable with complete offline functionality and 9 working modules.
+**Final Result:** 76.75 MB executable with complete offline functionality and 19 working modules.
 
 ---
 
 **Document Version:** 1.0  
 **Last Updated:** November 1, 2025  
 **Investigation Period:** November 1, 2025  
-**Final Build:** runCodeV3.exe (79.39 MB)
+**Final Build:** runCodeV3.exe (76.75 MB)
