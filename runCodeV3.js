@@ -1,5 +1,8 @@
 #!/usr/bin/env node
 
+// Preload modules for pkg compatibility
+require('./modulePreloader');
+
 /**
  * runCodeV3.js - Main connect to labDepartment
  * 
@@ -17,6 +20,15 @@ const ColorLog = require('./colorLog');
 const ModuleLoader = require('./moduleLoader');
 const ContextBuilder = require('./contextBuilder');
 const SandboxRunner = require('./sandboxRunner');
+
+// Import embedded libraries for offline functionality
+let EMBEDDED_LIBRARIES = null;
+try {
+    EMBEDDED_LIBRARIES = require('./embeddedLibraries');
+    ColorLog.GW('📦 Embedded libraries loaded successfully');
+} catch (error) {
+    ColorLog.YW('⚠️  No embedded libraries found - CDN mode only');
+}
 const yargs = require('yargs');
 const { hideBin } = require('yargs/helpers');
 const path = require('path');
@@ -44,9 +56,11 @@ class RunCodeV3 {
 
             // Parse command line arguments
             const argv = this.parseArguments();
+            
+            ColorLog.GW('📋 Command line arguments parsed successfully');
 
-            // Load all required modules
-            await this.loadModules();
+            // Load all required modules (with relaxed requirements for local server mode)
+            await this.loadModules(argv.localserver);
 
             // Perform database validation check
             await this.performDatabaseValidation(argv);
@@ -224,14 +238,18 @@ class RunCodeV3 {
 
     /**
      * Load all required modules
+     * @param {boolean} isLocalServerMode - Whether running in local server mode
      */
-    async loadModules() {
+    async loadModules(isLocalServerMode = false) {
         ColorLog.BW('🔧 Loading modules...');
         
-        this.modules = await this.moduleLoader.loadAllModules();
+        this.modules = await this.moduleLoader.loadAllModules(isLocalServerMode);
         
-        const summary = this.moduleLoader.getSummary();
+        const summary = this.moduleLoader.getSummary(isLocalServerMode);
         if (!summary.isValid) {
+            if (summary.failed.length > 0) {
+                ColorLog.RW(`❌ Failed to load ${summary.failed.length} modules:`, summary.failed);
+            }
             throw new Error('Critical modules failed to load');
         }
 
@@ -696,6 +714,81 @@ class RunCodeV3 {
     }
 
     /**
+     * Map CDN URLs to local embedded library paths
+     * @param {string} cdnUrl - Original CDN URL
+     * @returns {string|null} Local embedded path or null if not found
+     */
+    static mapCdnToLocal(cdnUrl) {
+        const cdnMappings = {
+            'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css': '/embedded-libs/font-awesome/css/all.min.css',
+            'https://cdn.jsdelivr.net/npm/chart.js': '/embedded-libs/chart.js/chart.min.js',
+            'https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js': '/embedded-libs/chart.js/chart.min.js',
+            'https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js': '/embedded-libs/xlsx/xlsx.full.min.js',
+            'https://unpkg.com/tabulator-tables@5.4.4/dist/css/tabulator.min.css': '/embedded-libs/tabulator/css/tabulator.min.css',
+            'https://unpkg.com/tabulator-tables@5.4.4/dist/js/tabulator.min.js': '/embedded-libs/tabulator/js/tabulator.min.js',
+            'https://unpkg.com/tabulator-tables@5.5.0/dist/css/tabulator.min.css': '/embedded-libs/tabulator/css/tabulator.min.css',
+            'https://unpkg.com/tabulator-tables@5.5.0/dist/js/tabulator.min.js': '/embedded-libs/tabulator/js/tabulator.min.js'
+        };
+        
+        return cdnMappings[cdnUrl] || null;
+    }
+
+    /**
+     * Process HTML content to replace CDN URLs with local embedded paths
+     * @param {string} htmlContent - Original HTML content
+     * @returns {string} Modified HTML with local paths
+     */
+    static processHtmlForEmbeddedLibs(htmlContent) {
+        if (!EMBEDDED_LIBRARIES) {
+            return htmlContent; // No embedded libraries, return as-is
+        }
+
+        let modifiedHtml = htmlContent;
+        
+        // Replace CDN URLs with local embedded paths
+        const replacements = [
+            {
+                original: 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css',
+                replacement: '/embedded-libs/font-awesome/css/all.min.css'
+            },
+            {
+                original: 'https://cdn.jsdelivr.net/npm/chart.js',
+                replacement: '/embedded-libs/chart.js/chart.min.js'
+            },
+            {
+                original: 'https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js',
+                replacement: '/embedded-libs/chart.js/chart.min.js'
+            },
+            {
+                original: 'https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js',
+                replacement: '/embedded-libs/xlsx/xlsx.full.min.js'
+            },
+            {
+                original: 'https://unpkg.com/tabulator-tables@5.4.4/dist/css/tabulator.min.css',
+                replacement: '/embedded-libs/tabulator/css/tabulator.min.css'
+            },
+            {
+                original: 'https://unpkg.com/tabulator-tables@5.4.4/dist/js/tabulator.min.js',
+                replacement: '/embedded-libs/tabulator/js/tabulator.min.js'
+            },
+            {
+                original: 'https://unpkg.com/tabulator-tables@5.5.0/dist/css/tabulator.min.css',
+                replacement: '/embedded-libs/tabulator/css/tabulator.min.css'
+            },
+            {
+                original: 'https://unpkg.com/tabulator-tables@5.5.0/dist/js/tabulator.min.js',
+                replacement: '/embedded-libs/tabulator/js/tabulator.min.js'
+            }
+        ];
+
+        for (const { original, replacement } of replacements) {
+            modifiedHtml = modifiedHtml.replace(new RegExp(original.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'g'), replacement);
+        }
+
+        return modifiedHtml;
+    }
+
+    /**
      * Start local HTTP server
      * @param {number} port - Port number to start server on
      */
@@ -717,6 +810,25 @@ class RunCodeV3 {
                 // Default to index.html if root is requested
                 if (pathname === '/') {
                     pathname = '/index.html';
+                }
+
+                // Check if this is a request for an embedded library
+                if (EMBEDDED_LIBRARIES && pathname.startsWith('/embedded-libs/')) {
+                    const libraryData = EMBEDDED_LIBRARIES.get(pathname);
+                    if (libraryData) {
+                        // Serve embedded library
+                        const buffer = Buffer.from(libraryData.base64, 'base64');
+                        res.writeHead(200, { 
+                            'Content-Type': libraryData.mimeType + '; charset=utf-8',
+                            'Access-Control-Allow-Origin': '*',
+                            'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
+                            'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+                            'Cache-Control': 'public, max-age=31536000' // Cache for 1 year
+                        });
+                        res.end(buffer);
+                        ColorLog.BW(`📦 Served embedded library: ${pathname} (${libraryData.mimeType})`);
+                        return;
+                    }
                 }
 
                 // Security: prevent directory traversal
@@ -798,6 +910,18 @@ class RunCodeV3 {
                             return;
                         }
 
+                        let fileContent = data;
+                        
+                        // Process HTML files for embedded library URL replacement
+                        if (mimeType === 'text/html' && EMBEDDED_LIBRARIES) {
+                            const htmlString = data.toString('utf8');
+                            const processedHtml = RunCodeV3.processHtmlForEmbeddedLibs(htmlString);
+                            if (processedHtml !== htmlString) {
+                                fileContent = Buffer.from(processedHtml, 'utf8');
+                                ColorLog.BW(`🔄 Processed HTML for embedded libs: ${pathname}`);
+                            }
+                        }
+
                         // Serve the file with appropriate headers
                         res.writeHead(200, { 
                             'Content-Type': mimeType + '; charset=utf-8',
@@ -805,7 +929,7 @@ class RunCodeV3 {
                             'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
                             'Access-Control-Allow-Headers': 'Content-Type, Authorization'
                         });
-                        res.end(data);
+                        res.end(fileContent);
                         ColorLog.GW(`✅ 200: Served ${pathname} (${mimeType})`);
                     });
                 });
@@ -835,19 +959,39 @@ class RunCodeV3 {
             // Handle graceful shutdown
             process.on('SIGINT', () => {
                 ColorLog.YW('\n⏹️  Shutting down server...');
-                server.close(() => {
-                    ColorLog.GW('✅ Server stopped gracefully');
+                if (server) {
+                    server.close(() => {
+                        ColorLog.GW('✅ Server stopped gracefully');
+                        process.exit(0);
+                    });
+                    
+                    // Force exit after 2 seconds if server doesn't close gracefully
+                    setTimeout(() => {
+                        ColorLog.YW('⚠️  Force closing server...');
+                        process.exit(0);
+                    }, 2000);
+                } else {
                     process.exit(0);
-                });
+                }
             });
 
             // Keep the server running
             process.on('SIGTERM', () => {
                 ColorLog.YW('\n⏹️  Received SIGTERM, shutting down server...');
-                server.close(() => {
-                    ColorLog.GW('✅ Server stopped gracefully');
+                if (server) {
+                    server.close(() => {
+                        ColorLog.GW('✅ Server stopped gracefully');
+                        process.exit(0);
+                    });
+                    
+                    // Force exit after 2 seconds if server doesn't close gracefully
+                    setTimeout(() => {
+                        ColorLog.YW('⚠️  Force closing server...');
+                        process.exit(0);
+                    }, 2000);
+                } else {
                     process.exit(0);
-                });
+                }
             });
 
         } catch (error) {

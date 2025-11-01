@@ -40,6 +40,22 @@
     "targets": [
       "node18-win-x64"
     ],
-    "outputPath": "./dist"
+    "assets": [
+      "embeddedLibraries.js",
+      "colorLog.js",
+      "moduleLoader.js",
+      "modulePreloader.js",
+      "contextBuilder.js",
+      "sandboxRunner.js"
+    ],
+    "scripts": [
+      "runCodeV3.js",
+      "colorLog.js",
+      "moduleLoader.js",
+      "modulePreloader.js",
+      "contextBuilder.js",
+      "sandboxRunner.js",
+      "embeddedLibraries.js"
+    ]
   }
 }

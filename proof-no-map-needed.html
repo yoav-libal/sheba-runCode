@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Proof: Libraries Work Without .map Files</title>
+    <!-- Chart.js from CDN (which also has .map files that might 404) -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <h1>Testing Chart.js WITHOUT .map files</h1>
+    <canvas id="testChart" width="400" height="200"></canvas>
+    
+    <script>
+        // This will work perfectly even if .map files return 404
+        const ctx = document.getElementById('testChart').getContext('2d');
+        
+        new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: ['Test 1', 'Test 2', 'Test 3'],
+                datasets: [{
+                    label: 'Proof Data',
+                    data: [10, 20, 15],
+                    backgroundColor: ['red', 'green', 'blue']
+                }]
+            },
+            options: {
+                responsive: false,
+                plugins: {
+                    title: {
+                        display: true,
+                        text: 'This chart proves .map files are NOT needed!'
+                    }
+                }
+            }
+        });
+        
+        // Log success to console
+        console.log('✅ Chart.js is working perfectly without .map files!');
+        console.log('✅ Chart created successfully');
+        
+        // Add visual confirmation
+        document.body.innerHTML += '<h2 style="color: green;">✅ SUCCESS: Chart.js works perfectly without .map files!</h2>';
+    </script>
+</body>
+</html>

@@ -13,9 +13,10 @@ class ModuleLoader {
 
     /**
      * Load all required modules
+     * @param {boolean} isLocalServerMode - Whether running in local server mode (relaxed module requirements)
      * @returns {Object} Object containing all loaded modules
      */
-    async loadAllModules() {
+    async loadAllModules(isLocalServerMode = false) {
         ColorLog.BW('🔄 Loading required modules...');
         
         const requiredModules = [
@@ -143,10 +144,12 @@ class ModuleLoader {
 
     /**
      * Check if all critical modules are loaded
+     * @param {boolean} isLocalServerMode - Whether running in local server mode (relaxed requirements)
      * @returns {boolean} True if all critical modules are available
      */
-    validateCriticalModules() {
-        const critical = ['sql', 'moment', 'fsExtra'];
+    validateCriticalModules(isLocalServerMode = false) {
+        // For local server mode, only require basic modules
+        const critical = isLocalServerMode ? ['moment', 'fsExtra'] : ['sql', 'moment', 'fsExtra'];
         const missing = critical.filter(name => !this.modules[name]);
         
         if (missing.length > 0) {
@@ -183,14 +186,15 @@ class ModuleLoader {
 
     /**
      * Get loading summary
+     * @param {boolean} isLocalServerMode - Whether running in local server mode
      * @returns {Object} Summary of loading results
      */
-    getSummary() {
+    getSummary(isLocalServerMode = false) {
         return {
             loaded: Array.from(this.loadedModules),
             failed: Array.from(this.failedModules),
             totalModules: Object.keys(this.modules).length,
-            isValid: this.validateCriticalModules()
+            isValid: this.validateCriticalModules(isLocalServerMode)
         };
     }
 }

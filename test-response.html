@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Embedded Libraries</title>
+    <!-- Font Awesome CDN - should be replaced with embedded version -->
+    <link rel="stylesheet" href="/embedded-libs/font-awesome/css/all.min.css">
+    <!-- Chart.js CDN - should be replaced with embedded version -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+    <!-- Tabulator CSS CDN - should be replaced with embedded version -->
+    <link href="https://unpkg.com/tabulator-tables@5.4.4/dist/css/tabulator.min.css" rel="stylesheet">
+    <!-- Tabulator JS CDN - should be replaced with embedded version -->
+    <script type="text/javascript" src="https://unpkg.com/tabulator-tables@5.4.4/dist/js/tabulator.min.js"></script>
+    <!-- XLSX CDN - should be replaced with embedded version -->
+    <script src="/embedded-libs/xlsx/xlsx.full.min.js"></script>
+</head>
+<body>
+    <h1>Testing Embedded Libraries</h1>
+    
+    <!-- Font Awesome Test -->
+    <div>
+        <h2><i class="fas fa-check-circle"></i> Font Awesome Test</h2>
+        <p>If you see a green checkmark icon above, Font Awesome is working!</p>
+    </div>
+    
+    <!-- Chart.js Test -->
+    <div>
+        <h2>Chart.js Test</h2>
+        <canvas id="testChart" width="400" height="200"></canvas>
+    </div>
+    
+    <!-- Tabulator Test -->
+    <div>
+        <h2>Tabulator Test</h2>
+        <div id="testTable"></div>
+    </div>
+    
+    <!-- XLSX Test -->
+    <div>
+        <h2>XLSX Test</h2>
+        <button onclick="testXLSX()">Test XLSX Library</button>
+        <div id="xlsxResult"></div>
+    </div>
+
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .fas { color: green; }
+        #testChart { border: 1px solid #ccc; margin: 10px 0; }
+        #testTable { margin: 10px 0; }
+    </style>
+
+    <script>
+        // Chart.js Test
+        document.addEventListener('DOMContentLoaded', function() {
+            if (typeof Chart !== 'undefined') {
+                const ctx = document.getElementById('testChart').getContext('2d');
+                new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: ['A', 'B', 'C'],
+                        datasets: [{
+                            label: 'Test Data',
+                            data: [12, 19, 3],
+                            backgroundColor: ['red', 'green', 'blue']
+                        }]
+                    },
+                    options: {
+                        responsive: false,
+                        plugins: {
+                            title: {
+                                display: true,
+                                text: 'Chart.js Working!'
+                            }
+                        }
+                    }
+                });
+                console.log('Chart.js loaded successfully');
+            } else {
+                console.error('Chart.js not loaded');
+            }
+
+            // Tabulator Test
+            if (typeof Tabulator !== 'undefined') {
+                new Tabulator("#testTable", {
+                    data: [
+                        {id:1, name:"John", age:30},
+                        {id:2, name:"Jane", age:25},
+                        {id:3, name:"Bob", age:35}
+                    ],
+                    columns: [
+                        {title:"ID", field:"id", width:50},
+                        {title:"Name", field:"name"},
+                        {title:"Age", field:"age"}
+                    ]
+                });
+                console.log('Tabulator loaded successfully');
+            } else {
+                console.error('Tabulator not loaded');
+            }
+        });
+
+        // XLSX Test Function
+        function testXLSX() {
+            if (typeof XLSX !== 'undefined') {
+                const wb = XLSX.utils.book_new();
+                const ws = XLSX.utils.aoa_to_sheet([
+                    ['Name', 'Age'],
+                    ['John', 30],
+                    ['Jane', 25]
+                ]);
+                XLSX.utils.book_append_sheet(wb, ws, 'TestSheet');
+                
+                document.getElementById('xlsxResult').innerHTML = 
+                    '<p style="color: green;">XLSX library is working! Workbook created successfully.</p>';
+                console.log('XLSX loaded successfully');
+            } else {
+                document.getElementById('xlsxResult').innerHTML = 
+                    '<p style="color: red;">XLSX library not loaded!</p>';
+                console.error('XLSX not loaded');
+            }
+        }
+    </script>
+</body>
+</html>

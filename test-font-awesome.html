@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Font Awesome Test</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .test-section {
+            background: white;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .icon-test {
+            display: flex;
+            align-items: center;
+            margin: 10px 0;
+            font-size: 18px;
+        }
+        .icon-test i {
+            margin-right: 15px;
+            width: 30px;
+            color: #333;
+        }
+        .folder-icons {
+            display: flex;
+            gap: 20px;
+            margin: 20px 0;
+        }
+        .folder-icon {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            background: #f9f9f9;
+        }
+        .folder-icon i {
+            font-size: 48px;
+            margin-bottom: 10px;
+        }
+        .folder-blue { color: #3498db; }
+        .folder-green { color: #2ecc71; }
+        .folder-orange { color: #f39c12; }
+    </style>
+</head>
+<body>
+    <h1><i class="fas fa-vial"></i> Font Awesome Icons Test</h1>
+    
+    <div class="test-section">
+        <h2>Basic Icons Test</h2>
+        <div class="icon-test">
+            <i class="fas fa-home"></i>
+            <span>Home Icon</span>
+        </div>
+        <div class="icon-test">
+            <i class="fas fa-user"></i>
+            <span>User Icon</span>
+        </div>
+        <div class="icon-test">
+            <i class="fas fa-cog"></i>
+            <span>Settings Icon</span>
+        </div>
+        <div class="icon-test">
+            <i class="fas fa-heart"></i>
+            <span>Heart Icon</span>
+        </div>
+    </div>
+
+    <div class="test-section">
+        <h2>Folder Icons (Three Colors)</h2>
+        <p>These are the "folder like" icons in three colors you mentioned:</p>
+        <div class="folder-icons">
+            <div class="folder-icon">
+                <i class="fas fa-folder folder-blue"></i>
+                <span>Blue Folder</span>
+            </div>
+            <div class="folder-icon">
+                <i class="fas fa-folder folder-green"></i>
+                <span>Green Folder</span>
+            </div>
+            <div class="folder-icon">
+                <i class="fas fa-folder folder-orange"></i>
+                <span>Orange Folder</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="test-section">
+        <h2>File Icons</h2>
+        <div class="icon-test">
+            <i class="fas fa-file"></i>
+            <span>Generic File</span>
+        </div>
+        <div class="icon-test">
+            <i class="fas fa-file-alt"></i>
+            <span>Text File</span>
+        </div>
+        <div class="icon-test">
+            <i class="fas fa-file-pdf"></i>
+            <span>PDF File</span>
+        </div>
+        <div class="icon-test">
+            <i class="fas fa-file-excel"></i>
+            <span>Excel File</span>
+        </div>
+    </div>
+
+    <div class="test-section">
+        <h2>Navigation Icons</h2>
+        <div class="icon-test">
+            <i class="fas fa-arrow-left"></i>
+            <span>Back Arrow</span>
+        </div>
+        <div class="icon-test">
+            <i class="fas fa-arrow-right"></i>
+            <span>Forward Arrow</span>
+        </div>
+        <div class="icon-test">
+            <i class="fas fa-bars"></i>
+            <span>Menu Bars</span>
+        </div>
+        <div class="icon-test">
+            <i class="fas fa-search"></i>
+            <span>Search Icon</span>
+        </div>
+    </div>
+
+    <script>
+        // Check if icons are loading properly
+        window.addEventListener('load', function() {
+            const icons = document.querySelectorAll('i[class*="fa"]');
+            console.log(`Found ${icons.length} Font Awesome icons on the page`);
+            
+            // Check if font is loaded
+            if (document.fonts) {
+                document.fonts.ready.then(() => {
+                    console.log('All fonts have been loaded');
+                });
+            }
+        });
+    </script>
+</body>
+</html>

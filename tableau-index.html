@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>לוח בקרת מעבדה - שיבא</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <!-- Tabulator CSS and JS -->
+    <link href="https://unpkg.com/tabulator-tables@5.5.0/dist/css/tabulator.min.css" rel="stylesheet">
+    <script type="text/javascript" src="https://unpkg.com/tabulator-tables@5.5.0/dist/js/tabulator.min.js"></script>
+    <!-- Color Configuration - Load first -->
+    <script src="colors.js"></script>
+    <script src="nextChilds.js"></script>
+    <script src="treeControl.js"></script>
+    <script src="testChooser.js"></script>
+    <script src="fieldChooser.js"></script>
+    <script src="dataService.js"></script>
+    <script src="resultComponent.js"></script>
+    <script src="resultComponentNew.js"></script>
+    <script src="simpleExcelExport.js"></script>
+    <script src="chartManager.js"></script>
+    <script src="defaultValuesOnLoading.js"></script>
+    <link rel="icon" href="data:,">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="script.js" defer></script>
+    <script>
+        // Toggle function for choosers container
+        function toggleChoosersContainer() {
+            const choosersContainer = document.getElementById('choosers-container');
+            const placeholderContainer = document.getElementById('chart-placeholder-container');
+            
+            if (choosersContainer.style.display === 'none') {
+                // Show choosers, hide placeholder
+                choosersContainer.style.display = 'flex';
+                placeholderContainer.style.display = 'none';
+            } else {
+                // Hide choosers, show placeholder
+                choosersContainer.style.display = 'none';
+                placeholderContainer.style.display = 'flex';
+            }
+        }
+        
+        // Tab functions
+        function switchTab(tabName) {
+            // Remove active class from all tabs and reset their styling
+            document.querySelectorAll('.header-tab').forEach(tab => {
+                tab.classList.remove('active');
+                // Reset to inactive styling
+                tab.style.border = '1px solid #666';
+                tab.style.color = '#666';
+                tab.style.fontWeight = 'normal';
+            });
+            
+            // Add active class to clicked tab and apply active styling
+            event.target.classList.add('active');
+            event.target.style.border = '2px solid #000';
+            event.target.style.color = '#000';
+            event.target.style.fontWeight = 'bold';
+            
+            // For now, just show popup
+            alert('נבחרה כרטיסייה: ' + tabName);
+        }
+        
+        // Toggle between original and new grid containers
+        function toggleGridContainers() {
+            const originalPanel = document.getElementById('aggregate-results-panel');
+            const newPanel = document.getElementById('new-aggregate-results-panel');
+            const toggleButton = document.querySelector('.btn-debug-toggle');
+            
+            if (originalPanel.style.display === 'none') {
+                // Switch back to original
+                originalPanel.style.display = 'flex';
+                newPanel.style.display = 'none';
+                toggleButton.style.background = '#28a745';
+                toggleButton.title = 'החלף לרכיב החדש';
+                console.log('🔄 Switched to original grid component');
+            } else {
+                // Switch to new
+                originalPanel.style.display = 'none';
+                newPanel.style.display = 'flex';
+                toggleButton.style.background = '#007bff';
+                toggleButton.title = 'החלף לרכיב המקורי';
+                console.log('🔄 Switched to new grid component');
+                
+                // Initialize new component if needed
+                if (typeof window.initNewGridComponent === 'function') {
+                    window.initNewGridComponent();
+                    // Update with current data if available
+                    if (typeof window.updateNewAggregateData === 'function') {
+                        window.updateNewAggregateData();
+                    }
+                }
+            }
+        }
+        
+        // Fullscreen toggle functionality
+        function toggleFullscreen() {
+            if (!document.fullscreenElement) {
+                // Enter fullscreen
+                if (document.documentElement.requestFullscreen) {
+                    document.documentElement.requestFullscreen();
+                } else if (document.documentElement.webkitRequestFullscreen) {
+                    document.documentElement.webkitRequestFullscreen();
+                } else if (document.documentElement.msRequestFullscreen) {
+                    document.documentElement.msRequestFullscreen();
+                }
+            } else {
+                // Exit fullscreen
+                if (document.exitFullscreen) {
+                    document.exitFullscreen();
+                } else if (document.webkitExitFullscreen) {
+                    document.webkitExitFullscreen();
+                } else if (document.msExitFullscreen) {
+                    document.msExitFullscreen();
+                }
+            }
+        }
+        
+        // Update fullscreen button state
+        function updateFullscreenButton() {
+            const fullscreenBtn = document.getElementById('fullscreen-btn');
+            const fullscreenIcon = document.getElementById('fullscreen-icon');
+            
+            if (document.fullscreenElement) {
+                // In fullscreen mode
+                fullscreenIcon.className = 'fas fa-compress';
+                fullscreenBtn.title = 'צא ממסך מלא (ESC)';
+                fullscreenBtn.style.background = '#dc3545'; // Red color for exit
+            } else {
+                // Normal mode
+                fullscreenIcon.className = 'fas fa-expand';
+                fullscreenBtn.title = 'מסך מלא (F11)';
+                fullscreenBtn.style.background = '#6c757d'; // Gray color for enter
+            }
+        }
+        
+        // Listen for fullscreen changes (including F11 key)
+        document.addEventListener('fullscreenchange', updateFullscreenButton);
+        document.addEventListener('webkitfullscreenchange', updateFullscreenButton);
+        document.addEventListener('msfullscreenchange', updateFullscreenButton);
+        
+        // Listen for F11 key to sync button state
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'F11') {
+                // Small delay to let F11 take effect before updating button
+                setTimeout(updateFullscreenButton, 100);
+            }
+        });
+    </script>
+</head>
+<body style="margin: 0; padding: 0; overflow-x: hidden; min-height: 100vh;">
+    <div class="dashboard-container" style="min-height: 100vh; width: 100vw; margin: 0; padding: 0; box-sizing: border-box; display: flex; flex-direction: column;">
+        <!-- Header -->
+        <div class="header" style="color: #0e1bd1;display: flex; flex-direction: row; align-items: center; justify-content: space-between; font-size: 1.6em; padding: 12px 0; border-bottom: 2px solid #222; position: relative;">
+            <div class="header-controls" style="display: flex; gap: 10px; align-items: center;">
+                <button onclick="exportNextChildsDebugFiles()" class="btn-debug" title="הורד קבצי דיבוג של nextChilds" style="background: #17a2b8; color: white; border: none; padding: 6px; border-radius: 4px; cursor: pointer; font-size: 0.9em; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center;">
+                    <i class="fas fa-bug"></i>
+                </button>
+                <button onclick="toggleGridContainers()" class="btn-debug-toggle" title="החלף בין רכיבי הגריד (ישן/חדש)" style="background: #28a745; color: white; border: none; padding: 6px; border-radius: 4px; cursor: pointer; font-size: 0.9em; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center;">
+                    <i class="fas fa-exchange-alt"></i>
+                </button>
+                <button onclick="toggleFullscreen()" id="fullscreen-btn" title="מסך מלא (F11)" style="background: #6c757d; color: white; border: none; padding: 6px; border-radius: 4px; cursor: pointer; font-size: 0.9em; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center;">
+                    <i class="fas fa-expand" id="fullscreen-icon"></i>
+                </button>
+                <button class="btn-primary" id="refreshData">
+                    <i class="fas fa-sync-alt"></i> רענון
+                </button>
+                <button class="btn-secondary" id="calculateBtn" disabled>
+                    <i class="fas fa-calculator"></i> חשב (F7)
+                </button>
+
+                <div id="validation-indicator" style="position: relative; display: flex; align-items: center; cursor: pointer;">
+                    <div id="traffic-light" style="width: 20px; height: 20px; border-radius: 50%; background-color: #dc3545; border: 2px solid #666; display: flex; align-items: center; justify-content: center; transition: background-color 0.3s;">
+                        <i class="fas fa-exclamation" style="color: white; font-size: 12px;"></i>
+                    </div>
+                    <div id="validation-tooltip" style="position: absolute; top: 25px; right: 0; background: #333; color: white; padding: 8px 12px; border-radius: 4px; font-size: 12px; display: none; z-index: 1000; direction: rtl; text-align: right; max-width: 220px; white-space: normal; line-height: 1.4;">
+                        <div id="validation-message">בדיקת תקינות...</div>
+                        <div style="position: absolute; top: -5px; right: 10px; width: 0; height: 0; border-left: 5px solid transparent; border-right: 5px solid transparent; border-bottom: 5px solid #333;"></div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Header Tabs -->
+            <div class="header-tabs" style="position: absolute; left: 58%; top: 55%; transform: translateX(-50%) translateY(-50%) translateY(7px) translateX(200px); display: flex; gap: 3px; align-items: center;">
+                <button class="header-tab" onclick="switchTab('בקרת חיובים')" style="background: transparent; border: 1px solid #666; padding: 4px 8px; cursor: pointer; font-size: 0.5em; color: #666; font-weight: normal; border-radius: 2px;">
+                    בקרת חיובים
+                </button>
+                <button class="header-tab" onclick="switchTab('TAT')" style="background: transparent; border: 1px solid #666; padding: 4px 8px; cursor: pointer; font-size: 0.5em; color: #666; font-weight: normal; border-radius: 2px;">
+                    TAT
+                </button>
+                <button class="header-tab" onclick="switchTab('תפוקות')" style="background: transparent; border: 1px solid #666; padding: 4px 8px; cursor: pointer; font-size: 0.5em; color: #666; font-weight: normal; border-radius: 2px;">
+                    תפוקות
+                </button>
+                <button class="header-tab active" onclick="switchTab('תפוקות - הנהלה')" style="background: transparent; border: 1px solid #000; padding: 4px 8px; cursor: pointer; font-size: 0.5em; color: #000; font-weight: bold; border-radius: 2px;">
+                    תפוקות - הנהלה
+                </button>
+            </div>
+            
+            <h1 style="display: flex; align-items: center; justify-content: flex-end; gap: 10px;">
+                <span>שיבא - אגף המעבדות</span>
+                <span style="font-size: 0.7em; color: #000; margin-right: 8px;">381</span>
+            </h1>
+        </div>
+        <div class="main-content" style="display: flex; flex-direction: row; width: 100vw; flex: 1; margin: 0; padding: 0; min-height: 0;">
+            <!-- Container for resizable panels -->
+            <div id="resizable-container" style="flex: 1.8; display: flex;">
+                <!-- Original Aggregate result column -->
+                <div id="aggregate-results-panel" style="flex: 1; border-right: 1px solid #222; display: flex; align-items: flex-start; justify-content: center; font-size: 1em;">
+                <div class="component-panel main-panel" style="width: 98%; margin: 0 auto; height: 100%; display: flex; flex-direction: column;">
+                    <!-- Clean header without hierarchy controls -->
+                    <div class="panel-header" style="height: 35px; display: flex; align-items: center; background: #f8f9fa; border: 1px solid #ccc; border-bottom: none; padding: 0 12px; position: relative;">
+                        <!-- Title and selector together -->
+                        <h3 style="margin: 0 auto; font-size: 1.1em; color: #2c3e50; display: flex; align-items: center; gap: 15px; font-weight: 600;">
+                            <i class="fas fa-table" style="color: #007bff; font-size: 0.95em;"></i>
+                            <span>טבלת תוצאות (מקורי)</span>
+                            <div class="starting-dimension-selector" id="dimension-selector-container" style="display: flex; align-items: center; gap: 6px; font-size: 0.7em; margin-top: 4px; visibility: hidden;">
+                                <select id="starting-dimension-select" onchange="changeStartingDimension(this.value)" style="direction: rtl; font-size: 12px; height: 20px; padding: 1px 4px; border: 1px solid #adb5bd; border-radius: 3px; background: white;">
+                                    <option value="senders">שולחים</option>
+                                    <option value="tests">בדיקות</option>
+                                    <option value="periods">תקופות</option>
+                                </select>
+                                <span id="starting-dimension-caption" style="direction: rtl; white-space: nowrap; font-weight: 500; color: #495057;">התחל מ:</span>
+                            </div>
+                        </h3>
+                    </div>
+                    
+                    <div class="panel-content" id="aggregate-result-content" style="flex: 1; background: #fff; border: 1px solid #ccc; display: flex; flex-direction: column;">
+                        <!-- Main content area - Table only -->
+                        <div class="content-area" style="flex: 1; overflow-y: auto;">
+                            <!-- Table content (always visible) -->
+                            <div id="table-content" style="display: block; height: 100%; padding: 5px;">
+                                <div id="aggregate-data-table" style="width: 99%; height: 100%; margin: 0 auto;"></div>
+                                <!-- Hidden elements for script compatibility -->
+                                <canvas id="aggregateChart" style="display: none; width:100%;height:250px;"></canvas>
+                                <div id="chart-placeholder" class="placeholder-message" style="display: none;">
+                                    <i class="fas fa-calculator" style="font-size: 2em; color: #ccc; margin-bottom: 15px;"></i>
+                                    <p>לחץ על "חשב" או F7 לצפייה בתוצאות</p>
+                                </div>
+                                <div id="aggregate-tree" class="aggregate-tree-view" style="display: none;">
+                                    <div class="placeholder-message" style="text-align: center; padding: 40px; color: #666; font-size: 1.1em;">
+                                        <i class="fas fa-calculator" style="font-size: 2em; color: #ccc; margin-bottom: 15px;"></i>
+                                        <p>לחץ על "חשב" או F7 לצפייה בתוצאות</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Bottom section with buttons -->
+                        <div class="panel-bottom" style="display: flex; justify-content: space-between; align-items: center; padding: 4px; border-top: 1px solid #eee;">
+                            <!-- Export buttons -->
+                            <div class="aggregate-controls" style="display: flex; gap: 2px;">
+                                <button id="export-aggregate-excel" class="btn-small" style="padding: 2px 4px; font-size: 0.65em; background: #16a34a; color: white; border: 1px solid #15803d; border-radius: 3px; cursor: pointer;">
+                                    <i class="fas fa-table"></i> אקסל
+                                </button>
+                                <button id="export-aggregate-pdf" class="btn-small" style="padding: 2px 4px; font-size: 0.65em; background: #dc3545; color: white; border: 1px solid #bd2130; border-radius: 3px; cursor: pointer;">
+                                    <i class="fas fa-file-pdf"></i> PDF
+                                </button>
+                                <button id="print-aggregate" class="btn-secondary btn-small" style="padding: 2px 4px; font-size: 0.65em;">
+                                    <i class="fas fa-print"></i> הדפסה
+                                </button>
+                            </div>
+                            <!-- Toggle button -->
+                            <div class="toggle-control">
+                                <button onclick="toggleChoosersContainer()" class="btn-toggle" title="החלף בין בוחרים לתרשים" style="background: #ffc107; color: #212529; border: none; padding: 4px 8px; border-radius: 4px; cursor: pointer; font-size: 0.7em;">
+                                    <i class="fas fa-exchange-alt"></i> החלף תצוגה
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                </div>
+                
+                <!-- NEW Aggregate result column (hidden by default) -->
+                <div id="new-aggregate-results-panel" style="flex: 1; border-right: 1px solid #222; display: none; align-items: flex-start; justify-content: center; font-size: 1em;">
+                <div class="component-panel main-panel" style="width: 98%; margin: 0 auto; height: 100%; display: flex; flex-direction: column;">
+                    <!-- Header for new component -->
+                    <div class="panel-header" style="height: 35px; display: flex; align-items: center; background: #e8f5e8; border: 1px solid #28a745; border-bottom: none; padding: 0 12px; position: relative;">
+                        <h3 style="margin: 0 auto; font-size: 1.1em; color: #155724; display: flex; align-items: center; gap: 15px; font-weight: 600;">
+                            <i class="fas fa-table" style="color: #28a745; font-size: 0.95em;"></i>
+                            <span>🆕 טבלת תוצאות (חדש)</span>
+                            <div class="new-dimension-selector" id="new-dimension-selector-container" style="display: flex; align-items: center; gap: 6px; font-size: 0.7em; margin-top: 4px;">
+                                <select id="new-starting-dimension-select" onchange="handleNewDimensionSelectorChange(this.value)" style="direction: rtl; font-size: 12px; height: 20px; padding: 1px 4px; border: 1px solid #28a745; border-radius: 3px; background: white;">
+                                    <option value="senders">שולחים</option>
+                                    <option value="tests">בדיקות</option>
+                                    <option value="periods">תקופות</option>
+                                </select>
+                                <span style="direction: rtl; white-space: nowrap; font-weight: 500; color: #155724;">התחל מ:</span>
+                            </div>
+                        </h3>
+                    </div>
+                    
+                    <div class="panel-content" id="new-aggregate-result-content" style="flex: 1; background: #fff; border: 1px solid #28a745; display: flex; flex-direction: column;">
+                        <!-- Main content area - New Table -->
+                        <div class="content-area" style="flex: 1; overflow-y: auto;">
+                            <!-- New Table content -->
+                            <div id="new-table-content" style="display: block; height: 100%; padding: 5px;">
+                                <div id="new-aggregate-data-table" style="width: 99%; height: 100%; margin: 0 auto;">
+                                    <!-- New grid will be rendered here -->
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Bottom section with buttons for new component -->
+                        <div class="panel-bottom" style="display: flex; justify-content: space-between; align-items: center; padding: 4px; border-top: 1px solid #28a745;">
+                            <!-- Export buttons for new component -->
+                            <div class="new-aggregate-controls" style="display: flex; gap: 2px;">
+                                <button onclick="exportNewAggregateToExcel()" class="btn-small" style="padding: 2px 4px; font-size: 0.65em; background: #28a745; color: white; border: 1px solid #1e7e34; border-radius: 3px; cursor: pointer;">
+                                    <i class="fas fa-table"></i> 🆕 אקסל
+                                </button>
+                                <button onclick="exportNewAggregateToPDF()" class="btn-small" style="padding: 2px 4px; font-size: 0.65em; background: #dc3545; color: white; border: 1px solid #bd2130; border-radius: 3px; cursor: pointer;">
+                                    <i class="fas fa-file-pdf"></i> 🆕 PDF
+                                </button>
+                                <button onclick="printNewAggregate()" class="btn-secondary btn-small" style="padding: 2px 4px; font-size: 0.65em;">
+                                    <i class="fas fa-print"></i> 🆕 הדפסה
+                                </button>
+                            </div>
+                            <!-- Status indicator -->
+                            <div class="new-toggle-control">
+                                <span style="background: #28a745; color: white; padding: 4px 8px; border-radius: 4px; font-size: 0.7em;">
+                                    <i class="fas fa-check-circle"></i> רכיב חדש פעיל
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            </div>
+            <!-- Choosers container (bottom level) -->
+            <div id="choosers-container" style="flex: 1.4; border-right: 1px solid #222; display: flex; flex-direction: row; height: 100%;">
+                <!-- test chooser + field chooser column (upper level) -->
+                <div id="tests-fields-container" style="flex: 1; border-right: 1px solid #222; display: flex; flex-direction: column; height: 100%;">
+                    <div style="height: 65%; border-bottom: 1px solid #222; display: flex; align-items: flex-start; justify-content: center; font-size: 0.85em; width: 100%; box-sizing: border-box;">
+                        <div class="component-panel" style="width: 95%; margin: 0 auto; height: 100%; display: flex; flex-direction: column;">
+                            <div class="panel-header"><h3><i class="fas fa-flask"></i><span>בוחר בדיקות</span></h3></div>
+                                                        <div class="panel-content" id="tests-content" style="flex: 1; background: #fff; border: 1px solid #ccc; display: flex; flex-direction: column; font-size: 0.9em;">
+                                    <div class="search-box">
+                                        <input type="text" placeholder="חיפוש בדיקות..." id="tests-search">
+                                        <i class="fas fa-search"></i>
+                                    </div>
+                                    <div id="tests-level-controls" class="level-controls" style="padding: 3px; border-bottom: 1px solid #eee; display: flex; gap: 2px; justify-content: flex-start; flex-wrap: wrap; direction: rtl;"></div>
+                                    <div id="tests-tree" class="tree-view" style="flex: 1; min-height: 0; overflow-y: auto; font-size: 1.05em;"></div>
+                                </div>
+                        </div>
+                    </div>
+                    <div style="height: 35%; display: flex; align-items: flex-start; justify-content: center; font-size: 0.8em; width: 100%; box-sizing: border-box;">
+                        <div class="component-panel" style="width: 95%; margin: 0 auto; height: 100%; display: flex; flex-direction: column;">
+                            <div class="panel-header"><h3><i class="fas fa-list"></i><span>בוחר שדות</span></h3></div>
+                            <div class="panel-content" id="fields-content" style="flex: 1; background: #fff; border: 1px solid #ccc; display: flex; flex-direction: column; font-size: 0.9em;">
+                                <div id="fields-level-controls" class="level-controls" style="padding: 3px; border-bottom: 1px solid #eee; display: flex; gap: 2px; justify-content: flex-start; flex-wrap: wrap; direction: rtl;"></div>
+                                <div id="fields-container" class="tree-view" style="flex: 1; min-height: 0; max-height: 250px; overflow-y: auto; font-size: 1.05em;"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- senders component column (upper level) -->
+                <div id="senders-container" style="flex: 1; display: flex; align-items: flex-start; justify-content: center; font-size: 1em;">
+                    <div class="component-panel" style="width: 95%; margin: 0 auto; height: 100%; display: flex; flex-direction: column;">
+                        <div class="panel-header">
+                            <h3><i class="fas fa-users"></i><span>גורמים שולחים</span></h3>
+                        </div>
+                                                <div class="panel-content" id="senders-content" style="flex: 1; background: #fff; border: 1px solid #ccc; display: flex; flex-direction: column;">
+                                <div class="search-box">
+                                    <input type="text" placeholder="חיפוש שולחים..." id="senders-search">
+                                    <i class="fas fa-search"></i>
+                                </div>
+                                <div id="senders-level-controls" class="level-controls" style="padding: 5px; border-bottom: 1px solid #eee; display: flex; gap: 3px; justify-content: flex-start; flex-wrap: wrap; direction: rtl;"></div>
+                                <div id="senders-tree" class="tree-view" style="flex: 1; min-height: 0; overflow-y: auto;"></div>
+                            </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Chart placeholder container (initially hidden) -->
+            <div id="chart-placeholder-container" style="flex: 1.4; border-right: 1px solid #222; display: none; align-items: center; justify-content: center; height: 100%; background-color: #fff3cd;">
+                <div style="text-align: center; padding: 40px; color: #856404;">
+                    <i class="fas fa-chart-line" style="font-size: 4em; color: #ffc107; margin-bottom: 20px;"></i>
+                    <h2 style="margin: 0 0 10px 0; color: #856404;">רכיב תרשימים</h2>
+                    <p style="margin: 0; font-size: 1.1em;">כאן יוצג רכיב התרשימים החדש</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+
+</body>
+</html>
